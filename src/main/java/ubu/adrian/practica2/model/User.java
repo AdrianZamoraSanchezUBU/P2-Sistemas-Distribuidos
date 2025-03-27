@@ -17,7 +17,7 @@ public class User implements UserDetails {
 	// ID único
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
 	// Nombre de usuario único y no nula
     @Column(unique = true, nullable = false)
