@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ubu.adrian.practica2.repository.UsuarioRepository;
+import ubu.adrian.practica2.repository.UserRepository;
 import ubu.adrian.practica2.model.User;
 
 /**
@@ -19,15 +19,15 @@ import ubu.adrian.practica2.model.User;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UserRepository userRepository;
 
     /**
      * Constructor del repositorio de usuarios
      * 
-     * @param usuarioRepository Repositorio para la gestión de usuarios
+     * @param userRepository Repositorio para la gestión de usuarios
      */
-    public WebSecurityConfig(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public WebSecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     /**
@@ -40,10 +40,12 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests((requests) -> requests
-            	// Acceso a la consola
-                .requestMatchers("/", "/home", "/h2-console/**").permitAll()
-                // Restro de requests
+        	.authorizeHttpRequests((requests) -> requests
+        		// TODO Quitar del permit all las que requieren autenticación al acabar las pruebas
+    			.requestMatchers("/login/**", "/register/**", "/admin/**", "/user/**", "/", "/createUser").permitAll()
+    			// Ruta de administración
+    			.requestMatchers("/admin/**").hasRole("ADMIN")
+    			// Restro de requests
                 .anyRequest().authenticated()
             )
             .formLogin((form) -> form
@@ -52,10 +54,6 @@ public class WebSecurityConfig {
                 .permitAll()
             )
             .logout((logout) -> logout.permitAll()); // Permite el cierre de sesión sin restricciones
-
-        // Consola de H2 para el desarrollo
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
 
         return http.build();
     }
@@ -69,7 +67,7 @@ public class WebSecurityConfig {
     public UserDetailsService userDetailsService() {
         return username -> {
         	// Busca el usuario por el nombre de usuario
-        	User usuario = usuarioRepository.findByUsername(username);
+        	User usuario = userRepository.findByUsername(username);
             
         	// Lanza una excepción si el usuario no existe
             if (usuario == null) {

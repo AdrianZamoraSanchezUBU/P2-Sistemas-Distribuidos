@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <title>User List</title>
+	</head>
+	<body>
+	    <div>
+	        <h1>Employees List</h1>
+	
+	        <a th:href="@{/register}"> Add User </a>
+	
+	        <table border="1">
+	            <thead>
+	                <tr>
+						<th>ID</th>
+	                    <th>User name</th>
+	                    <th>Pass</th>
+	                    <th>Rol</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <tr th:each="user : ${listUser}">
+						<td th:text="${user.id}"></td>
+	                    <td th:text="${user.username}"></td>
+	                    <td th:text="${user.password}"></td>
+	                    <td th:text="${user.rol}"></td> 
+	                </tr>
+	            </tbody>
+	        </table>
+	    </div>
+	</body>
+</html>

@@ -2,8 +2,10 @@ package ubu.adrian.practica2.model;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Entidad de usuarios de la base de datos
@@ -50,8 +52,7 @@ public class User implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		return List.of(new SimpleGrantedAuthority(rol));
 	}
 
 	/**
@@ -63,6 +64,15 @@ public class User implements UserDetails {
 	public String getPassword() {
 		return password;
 	}
+	
+	/**
+	 * Setter para contraseña
+	 * 
+	 * @return password contraseña
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	/**
 	 * Getter para el nombre de usuario
@@ -72,5 +82,52 @@ public class User implements UserDetails {
 	@Override
 	public String getUsername() {
 		return username;
+	}
+	
+	/**
+	 * Setter para el nombre de usuario
+	 * 
+	 * @param username nombre del usuario
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	/**
+	 * Getter para rol de usuario
+	 * 
+	 * @return rol del usuario
+	 */
+    public String getRol() {
+        return rol;
+    }
+
+    /**
+	 * Setter para rol de usuario
+	 * 
+	 * @param rol rol del usuario
+	 */
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+	
+	@Override
+	public boolean isAccountNonExpired() {
+	    return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+	    return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+	    return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+	    return true;
 	}
 }
