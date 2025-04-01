@@ -51,9 +51,16 @@ public class WebSecurityConfig {
             .formLogin((form) -> form
             	// Pagina deinicio de sesion
                 .loginPage("/login")
+                .loginProcessingUrl("/login")  // Añade esta línea
+                .usernameParameter("username") // Asegura que coincide con tu formulario
+                .passwordParameter("password") // Asegura que coincide con tu formulario
+                .defaultSuccessUrl("/", true) // Redirige al home al iniciar sesión
                 .permitAll()
             )
-            .logout((logout) -> logout.permitAll()); // Permite el cierre de sesión sin restricciones
+            .logout((logout) -> logout.permitAll()
+        		.logoutSuccessUrl("/login?logout")
+                .permitAll()
+    		);
 
         return http.build();
     }
@@ -68,6 +75,8 @@ public class WebSecurityConfig {
         return username -> {
         	// Busca el usuario por el nombre de usuario
         	User usuario = userRepository.findByUsername(username);
+        	
+        	System.out.println("Usuario encontrado: " + usuario); // Depuración
             
         	// Lanza una excepción si el usuario no existe
             if (usuario == null) {

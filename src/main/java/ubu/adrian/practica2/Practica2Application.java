@@ -1,6 +1,7 @@
 package ubu.adrian.practica2;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * Inicia los repositorios y modelos del sistema
  */
 @SpringBootApplication
+@EnableAutoConfiguration
 @EnableJpaRepositories("ubu.adrian.practica2.repository")
 @EntityScan("ubu.adrian.practica2.model")
 public class Practica2Application {

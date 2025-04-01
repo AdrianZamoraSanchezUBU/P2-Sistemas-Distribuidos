@@ -56,6 +56,24 @@ public class User implements UserDetails {
 	}
 
 	/**
+	 * Getter para ID
+	 * 
+	 * @return id identificador del usuario
+	 */
+	public int getId() {
+		return id;
+	}
+	
+	/**
+	 * Setter para ID
+	 * 
+	 * @param id nuevo identificador del usuario
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	/**
 	 * Getter para contraseña
 	 * 
 	 * @return contraseña

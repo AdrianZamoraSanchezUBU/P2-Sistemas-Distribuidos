@@ -6,6 +6,23 @@
 </head>
 <body>
     <h1>Página Home</h1>
-    <a th:href="@{/login}">Iniciar sesión</a>
+	
+	<!-- DEBUG - Muestra toda la info de autenticación -->
+	<div th:if="${#authentication != null}">
+	    <h3>Debug Info:</h3>
+	    <p>Authentication Class: [[${#authentication.getClass().name}]]</p>
+	    <p>Principal Class: [[${#authentication.principal.getClass().name}]]</p>
+	</div>
+
+	<!-- Si el usuario está autenticado, muestra su nombre y botón de logout -->
+    <div sec:authorize="isAuthenticated()">
+        <p>Bienvenido, <span th:text="${username}"></span>!</p>
+        <a th:href="@{/logout}">Cerrar sesión</a>
+    </div>
+
+    <!-- Si NO está autenticado, muestra el botón de login -->
+    <div sec:authorize="!isAuthenticated()">
+        <a th:href="@{/login}">Iniciar sesión</a>
+    </div>
 </body>
 </html>

@@ -7,6 +7,7 @@ bin/
 *.cmd
 mvnw
 .env
+build.bat
 
 ### STS ###
 .apt_generated
