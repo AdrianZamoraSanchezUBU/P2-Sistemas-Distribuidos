@@ -1,23 +1,36 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
 	    <title>Página de Registro</title>
 	</head>
 	<body>
 	    <div>
 	        <h1>Registro</h1>
+			
 	        <hr>
 	
-	        <form action="#" th:action="@{/createUser}" th:object="${user}" method="POST">
-				<input type="text" th:field="*{username}" placeholder="Nombre">
-	            <input type="password" th:field="*{password}" placeholder="Contraseña">
-	            <input type="text" th:field="*{rol}" placeholder="Rol">
-	            <button type="submit"> Crear usuario</button>
-				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-	        </form>
-	
+			<form action="#" th:action="@{/create-user}" th:object="${user}" method="POST">
+                <input type="text" th:field="*{username}" placeholder="Nombre" required>
+                <input type="password" th:field="*{password}" placeholder="Contraseña" required>
+                
+                <!-- Selector de rol solo visible para administradores -->
+                <div sec:authorize="hasRole('ADMIN')">
+                    <select th:field="*{rol}">
+                        <option value="USER" th:selected="${user.rol == 'USER'}">Usuario</option>
+                        <option value="ADMIN" th:selected="${user.rol == 'ADMIN'}">Administrador</option>
+                    </select>
+                </div>
+                
+                <!-- Rol USER por defecto para los no administradores -->
+                <input sec:authorize="!hasRole('ADMIN')"
+                       type="hidden" th:field="*{rol}" value="USER"/>
+                
+                <button type="submit">Crear usuario</button>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            </form>
+			
 	        <hr>
-	
+			
 	        <a th:href="@{/}">Volver</a>
 	    </div>
 	</body>

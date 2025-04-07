@@ -42,9 +42,9 @@ public class WebSecurityConfig {
         http
         	.authorizeHttpRequests((requests) -> requests
         		// TODO Quitar del permit all las que requieren autenticación al acabar las pruebas
-    			.requestMatchers("/login/**", "/register/**", "/admin/**", "/user/**", "/", "/createUser").permitAll()
+    			.requestMatchers("/", "/register", "/login/**", "/create-user").permitAll()
     			// Ruta de administración
-    			.requestMatchers("/admin/**").hasRole("ADMIN")
+    			.requestMatchers("/user-list/**", "/remove", "/update-user-data").hasRole("ADMIN")
     			// Restro de requests
                 .anyRequest().authenticated()
             )
@@ -58,7 +58,10 @@ public class WebSecurityConfig {
                 .permitAll()
             )
             .logout((logout) -> logout.permitAll()
-        		.logoutSuccessUrl("/login?logout")
+        		.logoutUrl("/logout")  // URL para activar el logout
+                .logoutSuccessUrl("/?logout")
+                .invalidateHttpSession(true) // Invalida la sesión
+                .deleteCookies("JSESSIONID") // Borrar las cookies
                 .permitAll()
     		);
 
@@ -75,8 +78,6 @@ public class WebSecurityConfig {
         return username -> {
         	// Busca el usuario por el nombre de usuario
         	User usuario = userRepository.findByUsername(username);
-        	
-        	System.out.println("Usuario encontrado: " + usuario); // Depuración
             
         	// Lanza una excepción si el usuario no existe
             if (usuario == null) {

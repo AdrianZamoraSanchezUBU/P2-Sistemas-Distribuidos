@@ -1,8 +1,11 @@
 package ubu.adrian.practica2.controller;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +13,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import ubu.adrian.practica2.model.User;
+import ubu.adrian.practica2.repository.UserRepository;
 import ubu.adrian.practica2.services.UserServices;
 
 /**
@@ -54,10 +59,37 @@ public class UserController {
         return "register";
     }
     
-    @PostMapping("/createUser")
-    public String createUser(@ModelAttribute("user") User user, BindingResult result) {
+    @PostMapping("/create-user")
+    public String createUser(@ModelAttribute("user") User user, BindingResult result, Authentication authentication) {
+    	List<String> permitedRoles = Arrays.asList("ADMIN", "USER");
+    	
+    	// Obtener el usuario actualmente autenticado
+        boolean isAdmin = false;
+        if (authentication != null && authentication.getAuthorities() != null) {
+            isAdmin = authentication.getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"));
+        }
+        
+        // Si el usuario no es ADMIN, forzar el rol USER
+        if (!isAdmin) {
+            user.setRol("USER");
+        }
+    	
+    	// Se comprueba que el usuario tiene contraseña
     	if (user.getPassword() == null || user.getPassword().isEmpty()) {
             result.rejectValue("password", "error.user", "La contraseña es obligatoria");
+            return "register";
+        }
+    	
+    	// Se comprueba que el usuario tiene nombre
+    	if (user.getUsername() == null || user.getUsername().isEmpty()) {
+            result.rejectValue("username", "error.user", "El nombre de usuario es obligatorio");
+            return "register";
+        }
+    	
+    	// Se comprueba que el rol seleccionado sea correcto
+    	if (!permitedRoles.contains(user.getRol()) || user.getRol().isEmpty()) {
+            result.rejectValue("rol", "error.user", "El rol debe ser correcto y no puede estar vacío");
             return "register";
         }
         
@@ -67,15 +99,20 @@ public class UserController {
     	
     	// Se guarda al usuario en la db
         userServices.saveUser(user);
-        return "redirect:/userList";
+        
+        if(isAdmin) {
+        	return "redirect:/user-list";
+        }
+        
+        return "redirect:/login";
     }
     
     /**
-	 * Gestiona las solicitudes de la ruta /user
+	 * Gestiona las solicitudes de la ruta /user-home
 	 * 
 	 * @return panel del usuario
 	 */
-    @GetMapping("/user")
+    @GetMapping("/user-home")
     public String user() {
         return "user";
     }

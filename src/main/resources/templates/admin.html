@@ -5,17 +5,19 @@
 	</head>
 	<body>
 	    <div>
-	        <h1>Employees List</h1>
+	        <h1>Lista de usuarios</h1>
 	
-	        <a th:href="@{/register}"> Add User </a>
-	
+	        <a th:href="@{/register}"> Crear usuario</a>
+			<hr>
+			
 	        <table border="1">
 	            <thead>
 	                <tr>
 						<th>ID</th>
-	                    <th>User name</th>
-	                    <th>Pass</th>
+	                    <th>Nombre usuario</th>
+	                    <th>Contraseña</th>
 	                    <th>Rol</th>
+						<th>Acciones</th>
 	                </tr>
 	            </thead>
 	            <tbody>
@@ -24,9 +26,22 @@
 	                    <td th:text="${user.username}"></td>
 	                    <td th:text="${user.password}"></td>
 	                    <td th:text="${user.rol}"></td> 
+						<td>
+							<form th:action="@{/remove}" method="POST">
+				                <input type="hidden" name="id" th:value="${user.id}" />
+				                <button type="submit">Eliminar</button>
+				            </form>
+							
+							<form th:action="@{/update-user-data}" method="GET">
+				                <input type="hidden" name="id" th:value="${user.id}" />
+				                <button type="submit">Actualizar</button>
+				            </form>
+						</td> 
 	                </tr>
 	            </tbody>
 	        </table>
 	    </div>
+		
+		<a th:href="@{/}">Volver</a>
 	</body>
 </html>

@@ -55,6 +55,13 @@
 	        <artifactId>spring-boot-starter-security</artifactId>
 	    </dependency>
 	    
+	    <!-- Thymeleaf Extras -->
+	    <dependency>
+		    <groupId>org.thymeleaf.extras</groupId>
+		    <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+		    <version>3.1.2.RELEASE</version>
+		</dependency>
+	    
 	    <!-- MySQL -->
 		<dependency>
 		    <groupId>mysql</groupId>

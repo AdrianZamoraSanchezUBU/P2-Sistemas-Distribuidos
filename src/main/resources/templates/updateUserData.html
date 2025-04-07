@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+	    <meta charset="UTF-8">
+	    <title>Actualizar usuario</title>
+	</head>
+	<body>
+	    <h1>Actualizar datos del usuario</h1>
+	    
+	    <form th:action="@{/update-user}" th:object="${user}" method="POST">
+	        <input type="hidden" th:field="*{id}" />
+	        
+	        <div>
+	            <label for="username">Nombre de usuario:</label>
+	            <input type="text" id="username" th:field="*{username}" required>
+	        </div>
+	        
+	        <div>
+	            <label for="password">Contraseña:</label>
+	            <input type="password" id="password" th:field="*{password}" required>
+	        </div>
+	        
+	        <div>
+	            <label for="rol">Rol:</label>
+	            <select id="rol" th:field="*{rol}" required>
+	                <option value="USER">Usuario</option>
+	                <option value="ADMIN">Administrador</option>
+	            </select>
+	        </div>
+	        
+	        <button type="submit">Actualizar usuario</button>
+	    </form>
+	    
+	    <a th:href="@{/user-list}">Volver a la lista</a>
+	</body>
+</html>

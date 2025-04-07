@@ -1,27 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Página principal</title>
     <meta charset="UTF-8">
 </head>
 <body>
     <h1>Página Home</h1>
-	
-	<!-- DEBUG - Muestra toda la info de autenticación -->
-	<div th:if="${#authentication != null}">
-	    <h3>Debug Info:</h3>
-	    <p>Authentication Class: [[${#authentication.getClass().name}]]</p>
-	    <p>Principal Class: [[${#authentication.principal.getClass().name}]]</p>
-	</div>
 
 	<!-- Si el usuario está autenticado, muestra su nombre y botón de logout -->
     <div sec:authorize="isAuthenticated()">
         <p>Bienvenido, <span th:text="${username}"></span>!</p>
-        <a th:href="@{/logout}">Cerrar sesión</a>
+		
+		<!-- Si el usuario es admin le da acceso al panel de admin -->
+		<div sec:authorize="hasRole('ADMIN')">
+			<form th:action="@{/user-list}" method="GET">
+			    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+			    <button type="submit">Panel de administrador</button>
+			</form>
+		</div>
+		
+		<!-- Cierre de la sesión actual -->
+		<form th:action="@{/logout}" method="POST">
+		    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+		    <button type="submit">Cerrar sesión</button>
+		</form>
     </div>
+	
+	
 
     <!-- Si NO está autenticado, muestra el botón de login -->
     <div sec:authorize="!isAuthenticated()">
+		<p>Debe de iniciar sesión antes de utilizar el servicio</p>
         <a th:href="@{/login}">Iniciar sesión</a>
     </div>
 </body>

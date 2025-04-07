@@ -19,7 +19,7 @@ public class User implements UserDetails {
 	// ID único
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
 	// Nombre de usuario único y no nula
     @Column(unique = true, nullable = false)
@@ -50,17 +50,12 @@ public class User implements UserDetails {
         this.rol = rol;
     }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(rol));
-	}
-
 	/**
 	 * Getter para ID
 	 * 
 	 * @return id identificador del usuario
 	 */
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	
@@ -69,7 +64,7 @@ public class User implements UserDetails {
 	 * 
 	 * @param id nuevo identificador del usuario
 	 */
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	
@@ -127,6 +122,14 @@ public class User implements UserDetails {
 	 */
     public void setRol(String rol) {
         this.rol = rol;
+    }
+    
+    /**
+     * Devuelve el rol, que es el que ofrece autoridad de aceso
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.getRol()));
     }
 	
 	@Override
