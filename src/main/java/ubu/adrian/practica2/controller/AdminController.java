@@ -90,7 +90,7 @@ public class AdminController {
             
             existingUser.setUsername(updatedUser.getUsername());
             
-            // Se encripta la contraseña antes de 
+            // Se encripta la contraseña antes de establecerla
             String passwordEncriptada = passwordEncoder.encode(updatedUser.getPassword());
             
             existingUser.setPassword(passwordEncriptada);

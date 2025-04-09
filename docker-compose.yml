@@ -22,7 +22,6 @@ services:
       start_period: 30s
     networks:
       - app-network
-
   app:
     build: .
     restart: unless-stopped
@@ -36,6 +35,14 @@ services:
     depends_on:
       mysqldb:
         condition: service_healthy
+    networks:
+      - app-network
+  flask-api:
+    build:
+      context: ./flask_api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
     networks:
       - app-network
 
