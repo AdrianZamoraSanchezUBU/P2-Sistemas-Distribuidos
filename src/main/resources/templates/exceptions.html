@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Excepciones</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Pruebas de excepciones</h1>
+	
+	<!-- Excepciones con ficheros -->
+	<h2>Excepciones de apretura y lectura de archivos.</h2>
+	<form action="/file-open-exception" method="GET">
+		<button type="submit">Probar</button>
+	</form>
+	
+	<!-- Excepciones con bases de datos -->
+	<h2>Excepciones de accesos a bases de datos</h2>
+	
+	<!-- Excepciones con APIs de terceros -->
+	<h2>Excepciones de llamadas a la API de Pokemon</h2>
+	
+	<!-- Panel donde se muestran las excepciones -->
+	<div id="excepcion-panel">
+		<p th:text="${exceptionMessage}", id="exception-text">Mensaje de la excepción</p>
+	</div>
+</body>
+</html>

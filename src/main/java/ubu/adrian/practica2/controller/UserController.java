@@ -2,7 +2,6 @@ package ubu.adrian.practica2.controller;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,10 +12,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import ubu.adrian.practica2.model.User;
-import ubu.adrian.practica2.repository.UserRepository;
 import ubu.adrian.practica2.services.UserServices;
 
 /**

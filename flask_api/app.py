@@ -3,19 +3,19 @@ from flask import Flask, jsonify, request
 app = Flask(__name__)
 
 ### Excepciones con ficheros ###
-@app.route('/file-not-found', methods=['GET'])
+@app.route('/api/file-not-found', methods=['GET'])
 def missing_file_error():
     return (jsonify({'message': 'error'}), 200)
 
-@app.route('/file-open-error', methods=['GET'])
+@app.route('/api/file-open-error', methods=['GET'])
 def open_file_error():
     return (jsonify({'message': 'error'}), 200)
 
-@app.route('/file-read-error', methods=['GET'])
+@app.route('/api/file-read-error', methods=['GET'])
 def read_file_error():
     return (jsonify({'message': 'error'}), 200)
 
-@app.route('/file-write-error', methods=['GET'])
+@app.route('/api/file-write-error', methods=['GET'])
 def write_file_error():
     return (jsonify({'message': 'error'}), 200)
 
@@ -23,4 +23,4 @@ def write_file_error():
 
 if __name__ == '__main__':
     # Se lanza la API en el localhost con el puerto 5000
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True, passthrough_errors=True)
