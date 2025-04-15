@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.client.RestTemplate;
+
 import ubu.adrian.practica2.repository.UserRepository;
 import ubu.adrian.practica2.model.User;
 
@@ -42,7 +44,7 @@ public class WebSecurityConfig {
         http
         	.authorizeHttpRequests((requests) -> requests
         		// TODO Quitar del permit all las que requieren autenticación al acabar las pruebas
-    			.requestMatchers("/", "/register", "/login/**", "/create-user", "/exceptions", "/file-open-exception").permitAll()
+    			.requestMatchers("/", "/register", "/login/**", "/create-user", "/exceptions", "/file/read", "/file/write").permitAll()
     			// Ruta de administración
     			.requestMatchers("/user-list/**", "/remove", "/update-user-data").hasRole("ADMIN")
     			// Restro de requests
@@ -96,5 +98,15 @@ public class WebSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    
+    /**
+     * 
+     * 
+     * @return
+     */
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

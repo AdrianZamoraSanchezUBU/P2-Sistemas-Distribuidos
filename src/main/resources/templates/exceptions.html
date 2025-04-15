@@ -9,9 +9,47 @@
 	
 	<!-- Excepciones con ficheros -->
 	<h2>Excepciones de apretura y lectura de archivos.</h2>
-	<form action="/file-open-exception" method="GET">
-		<button type="submit">Probar</button>
-	</form>
+	
+	<!-- 
+		Las excepciones se prueban en 
+		un ejemlo de gestión de archivos 
+		listados por el servidor
+	-->
+	
+	<!-- Lista de ficheros -->
+	<div th:if="${error}">
+        <p style="color: red;">[[${error}]]</p>
+    </div>
+
+	<table th:if="${files}" border="1">
+		<tr>
+	    	<th>Archivo</th>
+		    <th>Opciones</th>
+	  	</tr>
+	    <tr th:each="file : ${files}">
+	        <td th:text="${file}"></td>
+			<td>
+				<form th:action="@{/file/read}" method="GET" style="display:inline;">
+                   <input type="hidden" name="filename" th:value="${file}" />
+                   <button type="submit">Leer</button>
+               </form>
+               <form th:action="@{/file/write}" method="GET" style="display:inline;">
+                   <input type="hidden" name="filename" th:value="${file}" />
+                   <button type="submit">Escribir</button>
+               </form>
+			</td>
+	    </tr>
+	</table>
+	
+	<div th:if="${readSuccess} or ${writeSuccess}">
+	    <h2>Contenido de [[${filename}]]:</h2>
+	    <p th:text="${content}"></p>
+	</div>
+	
+	<div th:if="${errorCode}">
+	    <h2>Error: [[${errorCode}]]</h2>
+	    <p th:text="${errorMessage}"></p>
+	</div>
 	
 	<!-- Excepciones con bases de datos -->
 	<h2>Excepciones de accesos a bases de datos</h2>

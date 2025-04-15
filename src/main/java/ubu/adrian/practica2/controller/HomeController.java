@@ -24,13 +24,4 @@ public class HomeController {
         }
         return "home";
     }
-	/**
-	 * Gestiona las solicitudes de la ruta /exceptions
-	 * 
-	 * @return pagina para probar las excepciones
-	 */
-	@GetMapping("/exceptions")
-    public String exceptions() {
-        return "exceptions";
-    }
 }
