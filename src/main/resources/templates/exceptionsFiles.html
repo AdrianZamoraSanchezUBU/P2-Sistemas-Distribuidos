@@ -44,22 +44,15 @@
 	<div th:if="${readSuccess} or ${writeSuccess}">
 	    <h2>Contenido de [[${filename}]]:</h2>
 	    <p th:text="${content}"></p>
+		<a th:href="@{/file/list}">Volver a la lista de archivos</a>
 	</div>
 	
 	<div th:if="${errorCode}">
 	    <h2>Error: [[${errorCode}]]</h2>
 	    <p th:text="${errorMessage}"></p>
+		<a th:href="@{/file/list}">Volver a la lista de archivos</a>
 	</div>
 	
-	<!-- Excepciones con bases de datos -->
-	<h2>Excepciones de accesos a bases de datos</h2>
-	
-	<!-- Excepciones con APIs de terceros -->
-	<h2>Excepciones de llamadas a la API de Pokemon</h2>
-	
-	<!-- Panel donde se muestran las excepciones -->
-	<div id="excepcion-panel">
-		<p th:text="${exceptionMessage}", id="exception-text">Mensaje de la excepción</p>
-	</div>
+	<a th:href="@{/exception-menu}">Volver al menu de excepciones</a>
 </body>
 </html>

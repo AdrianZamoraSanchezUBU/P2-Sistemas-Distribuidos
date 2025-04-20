@@ -23,7 +23,7 @@ import org.springframework.ui.Model;
  * Controlador de la página de excepciones
  */
 @Controller
-public class ExceptionController {
+public class FileExceptionController {
 	
 	@Autowired
     private RestTemplate restTemplate;
@@ -33,7 +33,7 @@ public class ExceptionController {
      * 
      * @return pagina para probar las excepciones
      */
-    @GetMapping("/exceptions")
+    @GetMapping("/file/list")
     public String exceptions(Model model) {
         try {
             String flaskApiUrl = "http://flask-api:5000/api/file/list";
@@ -50,7 +50,7 @@ public class ExceptionController {
             model.addAttribute("error", "Excepción al llamar a Flask API: " + e.getMessage());
         }
 
-        return "exceptions";
+        return "exceptionsFiles";
     }
 
 
@@ -79,7 +79,7 @@ public class ExceptionController {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, Object> errorResponse = mapper.readValue(e.getResponseBodyAsString(), Map.class);
-                Map<String, String> errorDetails = (Map<String, String>) errorResponse.get("error");
+                Map<String, String> errorDetails = (Map<String, String>) errorResponse.get("response");
 
                 // Se añaden como atributos del HTML
                 model.addAttribute("errorCode", errorDetails.get("code"));
@@ -91,7 +91,7 @@ public class ExceptionController {
             }
         }
 
-        return "exceptions";
+        return "exceptionsFiles";
     }
 
     /**
@@ -118,7 +118,7 @@ public class ExceptionController {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, Object> errorResponse = mapper.readValue(e.getResponseBodyAsString(), Map.class);
-                Map<String, String> errorDetails = (Map<String, String>) errorResponse.get("error");
+                Map<String, String> errorDetails = (Map<String, String>) errorResponse.get("response");
 
                 // Se añaden como atributos del HTML
                 model.addAttribute("errorCode", errorDetails.get("code"));
@@ -130,6 +130,6 @@ public class ExceptionController {
             }
         }
 
-        return "exceptions";
+        return "exceptionsFiles";
     }
 }

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Excepciones</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Pruebas de excepciones</h1>
+	
+	<!-- Excepciones con APIs de terceros -->
+	<h2>Excepciones de llamadas a la API de Pokemon</h2>
+	
+	<!-- Panel donde se muestran las excepciones -->
+	<div id="excepcion-panel">
+		<p th:text="${exceptionMessage}", id="exception-text">Mensaje de la excepción</p>
+	</div>
+	
+	<a th:href="@{/exception-menu}">Volver</a>
+</body>
+</html>

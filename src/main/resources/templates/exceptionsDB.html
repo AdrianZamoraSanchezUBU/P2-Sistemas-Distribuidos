@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Excepciones</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Pruebas de excepciones</h1>
+	
+	<!-- Excepciones con bases de datos -->
+	<h2>Excepciones de accesos a bases de datos</h2>
+	
+	<!-- Conexión a una base de datos -->
+	<div th:if="${db == false}">
+	    <form th:action="@{/db/connection}" method="GET" style="display:inline;">
+			<p>Base de datos</p>
+	    	<input type="text" name="database"/>
+			
+			<p >Tabla</p>
+			<input type="text" name="table"/>
+			
+			</br>
+	   		<button type="submit">Conectar</button>
+	   	</form>
+	</div>
+	
+	<div th:if="${success}">
+		<h2>Respuesta: [[${code}]]</h2>
+	    <p th:text="${message}"></p>
+	</div>
+		
+	<div th:if="${errorCode}">
+	    <h2>Error: [[${errorCode}]]</h2>
+	    <p th:text="${message}"></p>
+	</div>
+	
+	<a th:href="@{/exception-menu}">Volver</a>
+</body>
+</html>

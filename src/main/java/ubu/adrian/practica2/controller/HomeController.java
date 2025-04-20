@@ -24,4 +24,14 @@ public class HomeController {
         }
         return "home";
     }
+	
+	/**
+	 * Gestiona las solicitudes de la ruta /exception-menu
+	 * 
+	 * @return pagina exceptionMenu
+	 */
+	@GetMapping("/exception-menu")
+    public String menu() {
+        return "exceptionMenu";
+    }
 }

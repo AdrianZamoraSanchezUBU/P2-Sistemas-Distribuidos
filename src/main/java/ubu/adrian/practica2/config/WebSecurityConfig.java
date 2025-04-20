@@ -44,7 +44,7 @@ public class WebSecurityConfig {
         http
         	.authorizeHttpRequests((requests) -> requests
         		// TODO Quitar del permit all las que requieren autenticación al acabar las pruebas
-    			.requestMatchers("/", "/register", "/login/**", "/create-user", "/exceptions", "/file/read", "/file/write").permitAll()
+    			.requestMatchers("/", "/register", "/login/**", "/create-user", "/exception-menu", "/file/**", "/db/**", "/pokemon/**").permitAll()
     			// Ruta de administración
     			.requestMatchers("/user-list/**", "/remove", "/update-user-data").hasRole("ADMIN")
     			// Restro de requests
