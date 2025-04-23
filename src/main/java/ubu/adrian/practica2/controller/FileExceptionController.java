@@ -69,10 +69,13 @@ public class FileExceptionController {
             if (response.getStatusCode().is2xxSuccessful()) {
             	String content = (String) response.getBody().get("content");
                 
+            	int httpStatus = response.getStatusCode().value();
+            	
             	// Se establecen los atributos pasados al HTML
                 model.addAttribute("readSuccess", true);
                 model.addAttribute("filename", filename);
                 model.addAttribute("content", content);
+                model.addAttribute("httpStatus", httpStatus);
             }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
         	// Se gestiona el error devuelto por Flask
@@ -80,14 +83,16 @@ public class FileExceptionController {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, Object> errorResponse = mapper.readValue(e.getResponseBodyAsString(), Map.class);
                 Map<String, String> errorDetails = (Map<String, String>) errorResponse.get("response");
-
+                
                 // Se añaden como atributos del HTML
                 model.addAttribute("errorCode", errorDetails.get("code"));
                 model.addAttribute("errorMessage", errorDetails.get("message"));
+                model.addAttribute("httpStatus", e.getStatusCode().value());
             } catch (Exception ex) {
                 // Otros errores que no vienen de la API
                 model.addAttribute("errorCode", "UNKNOWN_EXCEPTION");
                 model.addAttribute("errorMessage", "Error inesperado: " + ex.getMessage());
+                model.addAttribute("httpStatus", 520);
             }
         }
 
@@ -107,26 +112,29 @@ public class FileExceptionController {
                 "http://flask-api:5000/api/file/write?filename=" + filename, Map.class);
 
             int content = (int) response.getBody().get("content");
+            int httpStatus = response.getStatusCode().value();
             
             // Se establecen los atributos pasados al HTML
             model.addAttribute("writeSuccess", true);
             model.addAttribute("filename", filename);
             model.addAttribute("content", content);
-            
+            model.addAttribute("httpStatus", httpStatus);
     	} catch (HttpClientErrorException | HttpServerErrorException e) {
         	// Se gestiona el error devuelto por Flask
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, Object> errorResponse = mapper.readValue(e.getResponseBodyAsString(), Map.class);
                 Map<String, String> errorDetails = (Map<String, String>) errorResponse.get("response");
-
+                
                 // Se añaden como atributos del HTML
                 model.addAttribute("errorCode", errorDetails.get("code"));
                 model.addAttribute("errorMessage", errorDetails.get("message"));
+                model.addAttribute("httpStatus", e.getStatusCode().value());
             } catch (Exception ex) {
                 // Otros errores que no vienen de la API
                 model.addAttribute("errorCode", "UNKNOWN_EXCEPTION");
                 model.addAttribute("errorMessage", "Error inesperado: " + ex.getMessage());
+                model.addAttribute("httpStatus", 520);
             }
         }
 

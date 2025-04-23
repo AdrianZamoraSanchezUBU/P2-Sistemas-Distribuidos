@@ -213,25 +213,76 @@ def test_db_connection():
         except:
             pass
 
+@app.route('/api/db/recurso-inexistente')
+def missing_resource_error():
+    try:
+        db = request.args.get('db')
+        table = request.args.get('table')
+
+        conn = get_connection(db)
+        cursor = conn.cursor()
+
+        # Se selecciona de una tabla inexistente
+        cursor.execute(f"SELECT * FROM no_existe")
+    except Error as e:
+        return jsonify({
+            "response": {
+                "code": "QUERY_ERROR",
+                "message": f"Error de query: {str(e)}"
+            }
+        }), 404
+    finally:
+        try:
+            cursor.close()
+            conn.close()
+        except:
+            pass
+
 @app.route('/api/db/error-insercion')
 def insert_error():
     try:
-        conn = get_connection()
+        db = request.args.get('db')
+        table = request.args.get('table')
+
+        conn = get_connection(db)
         cursor = conn.cursor()
 
-        cursor.execute("INSERT INTO usuarios (username, password) VALUES ('prueba', 'pass')")
-        conn.commit()
-
-        # Inserción con clave primaria duplicada
-        cursor.execute("INSERT INTO usuarios (username, password) VALUES ('prueba', 'pass')")
+        # Inserción con clave primaria duplicada (ya debe haber un admin)
+        cursor.execute(f"INSERT INTO {table} (username, password) VALUES ('admin', 'pass')")
         conn.commit()
     except Error as e:
         return jsonify({
             "response": {
                 "code": "MYSQL_ERROR",
-                "message": f"Error de MySQL: {str(e)}"
+                "message": f"Error de inserción: {str(e)}"
             }
-        }), 500
+        }), 409
+    finally:
+        try:
+            cursor.close()
+            conn.close()
+        except:
+            pass
+
+@app.route('/api/db/formato-incorrecto')
+def bad_format_error():
+    try:
+        db = request.args.get('db')
+        table = request.args.get('table')
+
+        conn = get_connection(db)
+        cursor = conn.cursor()
+
+        # Se inserta un numero en campo string 1 en campo username
+        cursor.execute(f"INSERT INTO {table} (id, username, password) VALUES ('string', 'usuarioErroneo', 'pass')")
+        conn.commit()
+    except Error as e:
+        return jsonify({
+            "response": {
+                "code": "QUERY_ERROR",
+                "message": f"Error de formato: {str(e)}"
+            }
+        }), 409
     finally:
         try:
             cursor.close()
@@ -242,18 +293,21 @@ def insert_error():
 @app.route('/api/db/query-error')
 def sql_syntax_error():
     try:
-        conn = get_connection()
+        db = request.args.get('db')
+        table = request.args.get('table')
+
+        conn = get_connection(db)
         cursor = conn.cursor()
 
         # Mal escrito
-        cursor.execute("SELECCIONA * FROM usuarios")
+        cursor.execute(f"SELECCIONA * FROM {table}")
     except Error as e:
         return jsonify({
             "response": {
                 "code": "QUERY_ERROR",
                 "message": f"Error de query: {str(e)}"
             }
-        }), 500
+        }), 400
     finally:
         try:
             cursor.close()

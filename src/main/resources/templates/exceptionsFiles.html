@@ -41,14 +41,18 @@
 	    </tr>
 	</table>
 	
+	<!-- Caso de reqiest exitosa -->
 	<div th:if="${readSuccess} or ${writeSuccess}">
-	    <h2>Contenido de [[${filename}]]:</h2>
+		<h3>Codigo de respuesta: [[${httpStatus}]]</h3>
+	    <h3>Contenido de [[${filename}]]:</h3>
 	    <p th:text="${content}"></p>
 		<a th:href="@{/file/list}">Volver a la lista de archivos</a>
 	</div>
 	
+	<!-- Caso de error en la request -->
 	<div th:if="${errorCode}">
-	    <h2>Error: [[${errorCode}]]</h2>
+	    <h3>Error: [[${errorCode}]]</h3>
+		<h3>Codigo de respuesta: [[${httpStatus}]]</h3>
 	    <p th:text="${errorMessage}"></p>
 		<a th:href="@{/file/list}">Volver a la lista de archivos</a>
 	</div>

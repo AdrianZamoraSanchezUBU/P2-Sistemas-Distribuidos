@@ -10,8 +10,15 @@
 	<!-- Excepciones con bases de datos -->
 	<h2>Excepciones de accesos a bases de datos</h2>
 	
+	<!-- Muestra la db y tabla en uso -->
+	<div>
+		<p>Base de datos en uso: [[${db}]]</p>
+		<p>Tabla en uso: [[${table}]]</p>
+	</div>
+	
 	<!-- Conexión a una base de datos -->
-	<div th:if="${db == false}">
+	<div th:if="${db == null}">
+		<h3>Excepciones durante la conexión</h3>
 	    <form th:action="@{/db/connection}" method="GET" style="display:inline;">
 			<p>Base de datos</p>
 	    	<input type="text" name="database"/>
@@ -23,17 +30,57 @@
 	   		<button type="submit">Conectar</button>
 	   	</form>
 	</div>
+		
+		
+	<!-- Error de restricción (key unica en este caso) -->
+	<div th:if="${db != null}">
+		<h3>Violación de restriccion de primary key</h3>
+	    <form th:action="@{/db/error-insercion}" method="GET" style="display:inline;">
+	   		<button type="submit">Insertar clave duplicada</button>
+	   	</form>
+	</div>
 	
+	<!-- Error de formato de datos -->
+	<div th:if="${db != null}">
+		<h3>Error al insertar un INT en un campo String</h3>
+	    <form th:action="@{/db/formato-incorrecto}" method="GET" style="display:inline;">
+	   		<button type="submit">Insertar datos incorrectos</button>
+	   	</form>
+	</div>
+		
+	<!-- Error de tabla no existente -->
+	<div th:if="${db != null}">
+		<h3>Select sobre un recurso (una tabla) no existente</h3>
+	    <form th:action="@{/db/recurso-inexistente}" method="GET" style="display:inline;">
+	   		<button type="submit">Hacer select</button>
+	   	</form>
+	</div>
+	
+	
+	<!-- Error de query mal formada (mal uso del lenguaje SQL) -->
+	<div th:if="${db != null}">
+		<h3>Error de query mal formada</h3>
+	    <form th:action="@{/db/error-query}" method="GET" style="display:inline;">
+	   		<button type="submit">Hacer query</button>
+	   	</form>
+	</div>
+		
+	<!-- Se muestran los errores o estados de éxito -->
 	<div th:if="${success}">
-		<h2>Respuesta: [[${code}]]</h2>
+		<h3>Respuesta: [[${code}]]</h3>
+		<h3>Codigo de respuesta: [[${httpStatus}]]</h3>
 	    <p th:text="${message}"></p>
 	</div>
 		
 	<div th:if="${errorCode}">
-	    <h2>Error: [[${errorCode}]]</h2>
+	    <h3>Error: [[${errorCode}]]</h3>
+		<h3>Codigo de respuesta: [[${httpStatus}]]</h3>
 	    <p th:text="${message}"></p>
 	</div>
 	
-	<a th:href="@{/exception-menu}">Volver</a>
+	
+	<a th:href="@{/db/menu}">Volver a las excepciones de bases de datos</a>
+	</br>
+	<a th:href="@{/exception-menu}">Volver al menu de excepciones</a>
 </body>
 </html>
