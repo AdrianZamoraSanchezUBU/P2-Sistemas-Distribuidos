@@ -14,3 +14,7 @@ NOTA: es importante saltar los tests puesto que no hay una base de datos aún, e
 
 ### Para levantar la APP
 `docker-compose up app`
+
+## Lanzar todo
+Para evitar tener que ejecutar varios comandos para lanzar cada contenedor, tengo un script en bash que crea el proyecto y lo levanta:
+`.\build.bat`

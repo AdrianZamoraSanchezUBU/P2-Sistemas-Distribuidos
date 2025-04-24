@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 import mysql.connector
 from mysql.connector import Error, InterfaceError, OperationalError
 import os
+import requests
 
 app = Flask(__name__)
 
@@ -316,7 +317,60 @@ def sql_syntax_error():
             pass
 
 ### Excepciones en el uso de APIs de terceros ###
+@app.route('/api/pokemon/query-pokemon')
+def query_pokemon():
+    name = request.args.get('name')
+    request_url = f"https://pokeapi.co/api/v2/pokemon/{name}"
 
+    try:
+        response = requests.get(request_url, timeout=5)
+        response.raise_for_status()  # Lanzará HTTPError si la respuesta no es 2xx
+
+        data = response.json()
+
+        return jsonify({
+            "response": {
+                "code": "POKEMON_FOUND",
+                "message": "Datos de " + name + " obtenidos con éxito",
+                "name": data["name"],
+                "id": data["id"],
+                "weight": data["weight"],
+                "height": data["height"],
+                "image_url": data["sprites"]["front_default"]
+            }
+        }), 200
+
+    except requests.exceptions.HTTPError as e:
+        return jsonify({
+            "response": {
+                "code": "ERROR",
+                "message": f"Error HTTP: {response.status_code}"
+            }
+        }), response.status_code
+
+    except requests.exceptions.ConnectionError:
+        return jsonify({
+            "response": {
+                "code": "CONNECTION_ERROR",
+                "message": "No se pudo conectar con PokéAPI"
+            }
+        }), 503
+
+    except requests.exceptions.Timeout:
+        return jsonify({
+            "response": {
+                "code": "TIMEOUT",
+                "message": "La API de Pokemon ha tardado demasiado en responder"
+            }
+        }), 504
+
+    except requests.exceptions.RequestException as e:
+        return jsonify({
+            "response": {
+                "code": "UNKNOWN_REQUEST_ERROR",
+                "message": f"Error: {str(e)}"
+            }
+        }), 500
 
 if __name__ == '__main__':
     # Se lanza la API en el localhost con el puerto 5000
