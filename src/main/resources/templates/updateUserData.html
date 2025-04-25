@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
-	    <meta charset="UTF-8">
 	    <title>Actualizar usuario</title>
+		<meta charset="UTF-8">
+		<!-- Bootstrap CDN -->
+	  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 	</head>
 	<body>
 	    <h1>Actualizar datos del usuario</h1>
@@ -32,5 +34,8 @@
 	    </form>
 	    
 	    <a th:href="@{/user-list}">Volver a la lista</a>
+		
+		<!-- Footer -->
+	    <div th:replace="~{fragments/footer :: footer}"></div>
 	</body>
 </html>

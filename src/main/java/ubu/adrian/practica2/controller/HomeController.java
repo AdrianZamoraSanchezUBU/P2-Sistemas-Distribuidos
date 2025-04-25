@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 
 /**
  * Controlador de la página principal
+ * 
+ * @author Adrián Zamora Sánchez (azs1004@alu.ubu.es)
  */
 @Controller
 public class HomeController {

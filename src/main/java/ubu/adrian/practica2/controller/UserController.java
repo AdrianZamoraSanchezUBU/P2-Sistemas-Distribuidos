@@ -18,17 +18,25 @@ import ubu.adrian.practica2.model.User;
 import ubu.adrian.practica2.services.UserServices;
 
 /**
- * Controlador de las páginas relacionadas
- * con la gestión de usuarios
+ * Controlador de las páginas relacionadas con la gestión de usuarios
+ * 
+ * @author Adrián Zamora Sánchez (azs1004@alu.ubu.es)
  */
 @Controller
 public class UserController {
+	// Servicio de usuarios
 	@Autowired
 	private UserServices userServices;
 	
+	// Servicio de encriptación de contraseñas
 	@Autowired
     private PasswordEncoder passwordEncoder;
     
+	/**
+	 * Constructor del controlador de usuarios
+	 * 
+	 * @param userServices servicio de usuarios
+	 */
     public UserController(UserServices userServices) {
         this.userServices = userServices;
     }
@@ -107,15 +115,5 @@ public class UserController {
         
         // Si lo crea el admin devuelve user list, sino pagina de login
         return isAdmin ? "redirect:/user-list" : "redirect:/login";
-    }
-    
-    /**
-	 * Gestiona las solicitudes de la ruta /user-home
-	 * 
-	 * @return panel del usuario
-	 */
-    @GetMapping("/user-home")
-    public String user() {
-        return "user";
     }
 }

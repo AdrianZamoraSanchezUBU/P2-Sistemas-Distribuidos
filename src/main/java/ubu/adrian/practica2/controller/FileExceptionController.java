@@ -20,7 +20,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.ui.Model;
 
 /**
- * Controlador de la página de excepciones
+ * Controlador del panel de excepciones en el manejo de archivos
+ * 
+ * @author Adrián Zamora Sánchez (azs1004@alu.ubu.es)
  */
 @Controller
 public class FileExceptionController {
@@ -29,9 +31,9 @@ public class FileExceptionController {
     private RestTemplate restTemplate;
 
     /**
-     * Gestiona las solicitudes de la ruta /exceptions
+     * Gestiona las solicitudes de la ruta /file/list
      * 
-     * @return pagina para probar las excepciones
+     * @return pagina con listado de archivos
      */
     @GetMapping("/file/list")
     public String exceptions(Model model) {
@@ -57,7 +59,7 @@ public class FileExceptionController {
 	/**
 	 * Gestiona las solicitudes de la ruta /file/read
 	 * 
-	 * @return pagina de excepciones
+	 * @return solicitudes de lectura
 	 */
     @GetMapping("/file/read")
     public String readFile(@RequestParam String filename, Model model) {    
@@ -102,9 +104,9 @@ public class FileExceptionController {
     /**
 	 * Gestiona las solicitudes de la ruta /file/write
 	 * 
-	 * @return pagina de excepciones
+	 * @return solicitudes de modificación de archivos
 	 */
-    @GetMapping("/file/write")
+    @PostMapping("/file/write")
     public String writeFile(@RequestParam String filename, Model model) {
     	try {
     		// Llamada a la API con el archivo a escribir (le suma 1 al contenido)

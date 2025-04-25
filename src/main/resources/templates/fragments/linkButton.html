@@ -1,0 +1,4 @@
+<!-- Fragmento: link que parece un botón -->
+<div th:fragment="boton(texto, url, class, color)">
+  <a th:text="${texto}" th:href="${url}" class="btn btn-secondary" th:classappend=" ${class}" th:styleappend=${color}></a>
+</div>

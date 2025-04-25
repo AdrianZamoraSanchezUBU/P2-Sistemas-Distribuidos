@@ -1,0 +1,4 @@
+<!-- Fragmento de boton principal con parámetros -->
+<div class="d-flex justify-content-center" th:fragment="boton(texto, class, color)">
+  <button type="submit" th:text="${texto}" class="btn btn-primary" th:classappend=" ${class}" th:styleappend=${color}></button>
+</div>

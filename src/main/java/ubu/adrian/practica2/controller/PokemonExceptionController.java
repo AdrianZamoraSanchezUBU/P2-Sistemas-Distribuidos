@@ -1,15 +1,12 @@
 package ubu.adrian.practica2.controller;
 
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -20,7 +17,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.ui.Model;
 
 /**
- * Controlador de la página de excepciones
+ * Controlador del panel de excepciones con la API de Pokemon
+ * 
+ * @author Adrián Zamora Sánchez (azs1004@alu.ubu.es)
  */
 @Controller
 public class PokemonExceptionController {

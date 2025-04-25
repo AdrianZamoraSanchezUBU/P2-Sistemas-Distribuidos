@@ -1,0 +1,4 @@
+<!-- Fragmento: botón con link de volver -->
+<div th:fragment="boton(url, class, color)">
+  <a th:href="${url}" class="btn btn-secondary" th:classappend=" ${class}" th:styleappend=${color}>Volver</a>
+</div>

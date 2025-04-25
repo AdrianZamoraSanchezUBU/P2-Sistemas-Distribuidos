@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Excepciones</title>
-    <meta charset="UTF-8">
+    <title>Menú excepciones</title>
+	<meta charset="UTF-8">
+	<!-- Bootstrap CDN -->
+  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <h1>Tipos de excepciones a probar</h1>
@@ -18,5 +20,8 @@
 	<!-- Excepciones con API de pokemon -->
 	<h2>Excepciones con API de pokemon</h2>
 	<a th:href="@{/pokemon/menu}">Ir</a>
+	
+	<!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

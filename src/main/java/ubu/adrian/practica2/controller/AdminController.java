@@ -21,22 +21,32 @@ import ubu.adrian.practica2.services.UserServices;
 
 /**
  * Controlador del panel de administración
+ * 
+ * @author Adrián Zamora Sánchez (azs1004@alu.ubu.es)
  */
 @Controller
 public class AdminController {
-	
+	// Servicio de usuarios
 	@Autowired
 	private UserServices userServices;
 	
+	// Servicio de encriptación de contraseñas
 	@Autowired
     private PasswordEncoder passwordEncoder;
 	
+	// Referencia al repositorio de usuario
 	@Autowired
     private UserRepository userRepo;
 	
+	// Mapper de UserDTO a User
 	@Autowired
 	private UserMapper userMapper;
 
+	/**
+	 * Constructor que establece el userServices
+	 * 
+	 * @param userServices servicio de usuarios
+	 */
     public AdminController(UserServices userServices) {
         this.userServices = userServices;
     }
@@ -48,11 +58,13 @@ public class AdminController {
 	 */
     @GetMapping("/user-list")
     public String showUserList(Model model) {
+    	// Lista de usuarios
     	List<UserDTO> userDTOs = userServices.getAllUsers()
                 .stream()
                 .map(userMapper::toDTO)
                 .toList();
     	
+    	// Se añaden al modelo
     	model.addAttribute("listUsers", userDTOs);
         
         return "admin";
@@ -66,7 +78,7 @@ public class AdminController {
      */
     @PostMapping("/remove")
     public String removeUser(@RequestParam("id") Long id) {
-    	System.out.println("Se ha eliminado el usuario: " + Long.toString(id));
+    	// Elimina por id
         userRepo.findById(id).ifPresent(user -> userRepo.deleteById(id));
         return "redirect:/user-list";
     }
@@ -93,24 +105,28 @@ public class AdminController {
 	 */
     @PostMapping("/update-user")
     public String updateUser(@ModelAttribute("user") UserDTO updatedUserDTO, Model model) {
-        
+        // Busca al usuario (el cual puede no estar)
     	Optional<User> optionalUser = userRepo.findById(updatedUserDTO.getId());
         
+    	// Comprueba si el usuario esta presente
     	if (optionalUser.isPresent()) {
+    		// Toma los datos del usuario
             User existingUser = optionalUser.get();
             existingUser.setUsername(updatedUserDTO.getUsername());
 
+            // Encripta la nueva contraseña
             String passwordEncriptada = passwordEncoder.encode(updatedUserDTO.getPassword());
             existingUser.setPassword(passwordEncriptada);
 
             existingUser.setRol(updatedUserDTO.getRol());
-
+            
+            // Lo vuelve a guardar (reescribe sus datos)
             userRepo.save(existingUser);
         } else {
+        	// Devuelve mensaje de error
             model.addAttribute("error", "No se encontró un usuario con el ID especificado.");
         }
 
-    	
     	return "redirect:/user-list";
     }
 }
