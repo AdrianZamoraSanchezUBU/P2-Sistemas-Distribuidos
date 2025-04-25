@@ -1,6 +1,7 @@
 package ubu.adrian.practica2.controller;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 
+import ubu.adrian.practica2.dto.UserDTO;
+import ubu.adrian.practica2.dto.UserMapper;
 import ubu.adrian.practica2.model.User;
 import ubu.adrian.practica2.repository.UserRepository;
 import ubu.adrian.practica2.services.UserServices;
@@ -30,6 +33,9 @@ public class AdminController {
 	
 	@Autowired
     private UserRepository userRepo;
+	
+	@Autowired
+	private UserMapper userMapper;
 
     public AdminController(UserServices userServices) {
         this.userServices = userServices;
@@ -42,7 +48,12 @@ public class AdminController {
 	 */
     @GetMapping("/user-list")
     public String showUserList(Model model) {
-        model.addAttribute("listUsers", userServices.getAllUsers());
+    	List<UserDTO> userDTOs = userServices.getAllUsers()
+                .stream()
+                .map(userMapper::toDTO)
+                .toList();
+    	
+    	model.addAttribute("listUsers", userDTOs);
         
         return "admin";
     }
@@ -81,22 +92,19 @@ public class AdminController {
 	 * @return panel del usuario
 	 */
     @PostMapping("/update-user")
-    public String updateUser(@ModelAttribute("user") User updatedUser, Model model) {
+    public String updateUser(@ModelAttribute("user") UserDTO updatedUserDTO, Model model) {
         
-    	Optional<User> optionalUser = userRepo.findById(updatedUser.getId());
+    	Optional<User> optionalUser = userRepo.findById(updatedUserDTO.getId());
         
-        if (optionalUser.isPresent()) {
+    	if (optionalUser.isPresent()) {
             User existingUser = optionalUser.get();
-            
-            existingUser.setUsername(updatedUser.getUsername());
-            
-            // Se encripta la contraseña antes de establecerla
-            String passwordEncriptada = passwordEncoder.encode(updatedUser.getPassword());
-            
+            existingUser.setUsername(updatedUserDTO.getUsername());
+
+            String passwordEncriptada = passwordEncoder.encode(updatedUserDTO.getPassword());
             existingUser.setPassword(passwordEncriptada);
-            
-            existingUser.setRol(updatedUser.getRol());
-            
+
+            existingUser.setRol(updatedUserDTO.getRol());
+
             userRepo.save(existingUser);
         } else {
             model.addAttribute("error", "No se encontró un usuario con el ID especificado.");

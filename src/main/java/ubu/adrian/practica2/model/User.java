@@ -16,16 +16,16 @@ public class User implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
-	// ID único
+	// ID (único)
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	// Nombre de usuario único y no nula
+	// Nombre de usuario (único y no nulo)
     @Column(unique = true, nullable = false)
     private String username;
 
-    // Contraseña no nula
+    // Contraseña (no nula)
     @Column(nullable = false)
     private String password;
 
@@ -33,7 +33,7 @@ public class User implements UserDetails {
     private String rol;
 
     /**
-     * Constructor por defecto.
+     * Constructor sin parámetros
      */
     public User() {}
 
@@ -126,29 +126,11 @@ public class User implements UserDetails {
     
     /**
      * Devuelve el rol, que es el que ofrece autoridad de aceso
+     * 
+     * @return List lista de autorizaciones
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.getRol()));
     }
-	
-	@Override
-	public boolean isAccountNonExpired() {
-	    return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-	    return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-	    return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-	    return true;
-	}
 }

@@ -7,6 +7,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * Clase encargada de generar al usuario admin cuando se ejecura la app
+ * 
+ * Operación idempotente, una vez creado no hace nada, por más veces que se ejecute
+ */
 @Component
 public class AdminInitializer implements CommandLineRunner {
 
@@ -18,9 +23,10 @@ public class AdminInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        
+        // Obtiene al admin
     	User admin = userRepository.findByUsername("admin");
     	
+    	// Comprueba si hay admin
     	if (admin == null) {
     		// Se genera al admin
             admin = new User();

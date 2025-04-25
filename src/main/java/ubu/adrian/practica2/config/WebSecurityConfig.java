@@ -20,11 +20,11 @@ import ubu.adrian.practica2.model.User;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-
+	// Referencia al repositorio de usuario
     private final UserRepository userRepository;
 
     /**
-     * Constructor del repositorio de usuarios
+     * Constructor de la configuración de seguridad
      * 
      * @param userRepository Repositorio para la gestión de usuarios
      */
@@ -43,19 +43,18 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
         	.authorizeHttpRequests((requests) -> requests
-        		// TODO Quitar del permit all las que requieren autenticación al acabar las pruebas
+        		// Paginas a las que se puede acceder sin login
     			.requestMatchers("/", "/register", "/login/**", "/create-user", "/exception-menu", "/file/**", "/db/**", "/pokemon/**").permitAll()
     			// Ruta de administración
     			.requestMatchers("/user-list/**", "/remove", "/update-user-data").hasRole("ADMIN")
-    			// Restro de requests
+    			// Restro de requests autenticadas por defecto
                 .anyRequest().authenticated()
             )
             .formLogin((form) -> form
             	// Pagina deinicio de sesion
-                .loginPage("/login")
-                .loginProcessingUrl("/login")  // Añade esta línea
-                .usernameParameter("username") // Asegura que coincide con tu formulario
-                .passwordParameter("password") // Asegura que coincide con tu formulario
+                .loginPage("/login") // URL de la página de login
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .defaultSuccessUrl("/", true) // Redirige al home al iniciar sesión
                 .permitAll()
             )
@@ -101,9 +100,9 @@ public class WebSecurityConfig {
     }
     
     /**
+     * Plantilla del modelo REST
      * 
-     * 
-     * @return
+     * @return Objeto de plantilla REST
      */
     @Bean
     public RestTemplate restTemplate() {

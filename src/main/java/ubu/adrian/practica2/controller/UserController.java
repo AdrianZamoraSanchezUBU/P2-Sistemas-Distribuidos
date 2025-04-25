@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import ubu.adrian.practica2.dto.UserDTO;
 import ubu.adrian.practica2.model.User;
 import ubu.adrian.practica2.services.UserServices;
 
@@ -56,8 +57,15 @@ public class UserController {
         return "register";
     }
     
+    /**
+     * Gestiona las solicitudes de la ruta /create-user
+	 * 
+	 * Crea un nuevo usuario a partir de los datos obtenidos
+	 * 
+	 * @return página de registro o user-list
+     */
     @PostMapping("/create-user")
-    public String createUser(@ModelAttribute("user") User user, BindingResult result, Authentication authentication) {
+    public String createUser(@ModelAttribute("user") UserDTO userDTO, BindingResult result, Authentication authentication) {
     	List<String> permitedRoles = Arrays.asList("ADMIN", "USER");
     	
     	// Obtener el usuario actualmente autenticado
@@ -66,42 +74,39 @@ public class UserController {
             isAdmin = authentication.getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"));
         }
-        
-        // Si el usuario no es ADMIN, forzar el rol USER
-        if (!isAdmin) {
-            user.setRol("USER");
-        }
     	
     	// Se comprueba que el usuario tiene contraseña
-    	if (user.getPassword() == null || user.getPassword().isEmpty()) {
+        if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
             result.rejectValue("password", "error.user", "La contraseña es obligatoria");
             return "register";
         }
     	
     	// Se comprueba que el usuario tiene nombre
-    	if (user.getUsername() == null || user.getUsername().isEmpty()) {
+        if (userDTO.getUsername() == null || userDTO.getUsername().isEmpty()) {
             result.rejectValue("username", "error.user", "El nombre de usuario es obligatorio");
             return "register";
         }
     	
-    	// Se comprueba que el rol seleccionado sea correcto
-    	if (!permitedRoles.contains(user.getRol()) || user.getRol().isEmpty()) {
-            result.rejectValue("rol", "error.user", "El rol debe ser correcto y no puede estar vacío");
+        // Si el usuario no es ADMIN, forzar el rol USER
+        String rolFinal = isAdmin ? userDTO.getRol() : "USER";
+        
+        // Se comprueba que el rol seleccionado sea correcto
+        if (!permitedRoles.contains(rolFinal)) {
+            result.rejectValue("rol", "error.user", "Rol no permitido");
             return "register";
         }
         
-        // Se encripta la contraseña antes de guardar
-    	String passwordEncriptada = passwordEncoder.encode(user.getPassword());
-        user.setPassword(passwordEncriptada);
-    	
+        // Se genera el usuario desde el DTO
+    	User user = new User();
+    	user.setUsername(userDTO.getUsername());
+        user.setRol(rolFinal);
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));  
+        
     	// Se guarda al usuario en la db
         userServices.saveUser(user);
         
-        if(isAdmin) {
-        	return "redirect:/user-list";
-        }
-        
-        return "redirect:/login";
+        // Si lo crea el admin devuelve user list, sino pagina de login
+        return isAdmin ? "redirect:/user-list" : "redirect:/login";
     }
     
     /**
