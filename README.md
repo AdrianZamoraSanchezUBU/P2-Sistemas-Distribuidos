@@ -39,4 +39,10 @@ NOTA: es importante saltar los tests puesto que no hay una base de datos aún, e
 
 ## Lanzar todo
 Para evitar tener que ejecutar varios comandos para lanzar cada contenedor, tengo un script en bash que crea todo el proyecto y lo levanta:
+
 `.\build.bat`
+
+### Conclusión
+La práctica ha sido completada de forma satisfactoria, alcanzado un estado que considero suficientemente completo con respecto a los requisitos que se nos planteaban. Por otro lado, me hubiese gustado tener algo más de tiempo para estudiar el funcionamiento de Spring Boot como framework y poder aplicar algunos estilos más detallados que cubran todas las vistas de la app con igual completitud.
+
+Considero haber aprendido mucho sobre el modelo vista controlador así como la integración de bases de datos (MySQL) y APIs sencillas (tanto propias como de terceros).
