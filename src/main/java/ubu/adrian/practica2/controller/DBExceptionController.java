@@ -53,7 +53,7 @@ public class DBExceptionController {
             String code = (String) responseBody.get("code");
             String message = (String) responseBody.get("message");
             int httpStatus = response.getStatusCode().value();
-
+            
             // Establecer los atributos para la vista
             model.addAttribute("code", code);
             model.addAttribute("db", database);
@@ -68,11 +68,28 @@ public class DBExceptionController {
                 Map<String, Object> errorResponse = mapper.readValue(e.getResponseBodyAsString(), Map.class);
                 Map<String, String> errorDetails = (Map<String, String>) errorResponse.get("response");
 
+                // Si se trataba de hacer una conexión y falla no guarda los datos
+                if(endpoint == "connect") {
+                	System.out.println("Bad DB CONECTIOn");
+                	this.database = null;
+                    this.table = null;
+                }
+                
+                model.addAttribute("db", database);
+                model.addAttribute("table", table);
                 model.addAttribute("errorCode", errorDetails.get("code"));
                 model.addAttribute("message", errorDetails.get("message"));
                 model.addAttribute("httpStatus", e.getStatusCode().value());
             } catch (Exception ex) {
+            	// Si se trataba de hacer una conexión y falla no guarda los datos
+            	if(endpoint == "connect") {
+                	this.database = null;
+                    this.table = null;
+                }
+            	
                 // Otros errores
+            	model.addAttribute("db", database);
+                model.addAttribute("table", table);
                 model.addAttribute("errorCode", "UNKNOWN_EXCEPTION");
                 model.addAttribute("errorMessage", "Error inesperado: " + ex.getMessage());
                 model.addAttribute("httpStatus", 520);
@@ -104,9 +121,10 @@ public class DBExceptionController {
 	 */
     @GetMapping("/db/connection")
     public String dbConection(@RequestParam String database, @RequestParam String table, Model model) {
-        this.database = database;
+    	this.database = database;
         this.table = table;
-        return handleDbRequest("connect", model);
+    	
+    	return handleDbRequest("connect", model);
     }
 
     /**
@@ -147,5 +165,22 @@ public class DBExceptionController {
     @GetMapping("/db/error-query")
     public String dbQueryError(Model model) {
         return handleDbRequest("query-error", model);
+    }
+    
+    /**
+	 * Gestiona las solicitudes de la ruta /db/disconnect
+	 * 
+	 * @return pagina con el resultado de la desconexión
+	 */
+    @GetMapping("/db/disconnect")
+    public String dbDisconnect(Model model) {
+    	this.database = null;
+    	this.table = null;
+    	
+    	// Se establecen los atributos pasados al HTML
+        model.addAttribute("db", database);
+        model.addAttribute("table", table);
+    
+    	return "exceptionsDB";
     }
 }

@@ -6,8 +6,9 @@
 	<!-- Bootstrap CDN -->
   	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Pruebas de excepciones</h1>
+<body >
+	<!-- Panel de excepciones -->
+	<div th:replace="~{fragments/exceptionHeader :: exceptionHeader}"></div>
 	
 	<!-- Excepciones con APIs de terceros -->
 	<h2>Excepciones de llamadas a la API de Pokemon</h2>
@@ -17,32 +18,36 @@
    </form>
    
 	<!-- Panel donde se muestran los datos del pokemon -->
-	<div th:if="${success}">
-		<p>[[${message}]]</p>
-		<p>[[${http_status}]]</p>
-		<h2>Pokemon: [[${name}]] con id [[${id}]]</h2>
-		<h3>Estadísticas</h3>
-		<p>Peso: [[${weight}]]</p>
-		<p>Altura: [[${height}]]</p>
-		
-		<div th:if="${imageUrl != null}">
-		    <img th:src="${imageUrl}" alt="Imagen del pokemon" style="width:250px;">
+	<div style="padding-bottom: 100px;">
+		<div th:if="${success}" >
+			<p>[[${message}]]</p>
+			<p>[[${http_status}]]</p>
+			<h2>Pokemon: [[${name}]] con id [[${id}]]</h2>
+			<h3>Estadísticas</h3>
+			<p>Peso: [[${weight}]]</p>
+			<p>Altura: [[${height}]]</p>
+			
+			<div th:if="${imageUrl != null}">
+			    <img th:src="${imageUrl}" alt="Imagen del pokemon" style="width:250px;">
+			</div>
+			
+			<h3>Respuesta: [[${code}]]</h3>
+			<h3>Codigo de respuesta: [[${httpStatus}]]</h3>
+		    <p th:text="${message}"></p>
 		</div>
 		
-		<h3>Respuesta: [[${code}]]</h3>
-		<h3>Codigo de respuesta: [[${httpStatus}]]</h3>
-	    <p th:text="${message}"></p>
-	</div>
-	
-	<!-- Panel donde se muestran las excepciones -->
-	<div th:if="${errorCode}">
-	    <h3>Error: [[${errorCode}]]</h3>
-		<h3>Codigo de respuesta: [[${httpStatus}]]</h3>
-	    <p th:text="${message}"></p>
-	</div>
-		
-	</br>
-	<a th:href="@{/exception-menu}">Volver</a>
+		<!-- Panel donde se muestran las excepciones -->
+		<div th:if="${errorCode}">
+		    <h3>Error: [[${errorCode}]]</h3>
+			<h3>Codigo de respuesta: [[${httpStatus}]]</h3>
+		    <p th:text="${message}"></p>
+		</div>
+			
+		<!-- Panel de excepciones -->
+	    <div class="m-3">
+	        <div th:replace="~{fragments/linkButton :: boton('Volver', '/exception-menu', '', 'background-color: #4CAF50;')}"></div>
+	    </div>
+	<div>
 	
 	<!-- Footer -->
     <div th:replace="~{fragments/footer :: footer}"></div>

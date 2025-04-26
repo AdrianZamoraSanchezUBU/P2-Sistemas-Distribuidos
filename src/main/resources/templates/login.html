@@ -9,21 +9,23 @@
 	</head>
 	<body>
 		<div class="container-fluid mt-5 d-flex flex-column align-items-center">
-		    <h1 class="text-center mb-3">Inicio de sesión</h1>
-		    <form action="#" th:action="@{/login}" method="POST" class="d-flex flex-column p-3 justify-content-center border shadow-lg">
-		        <input type="text" name="username" placeholder="Nombre" required="true" class="mb-3 p-2" />
-		        <input type="password" name="password" placeholder="Contraseña" required="true" class="mb-3 p-2" />
-		        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-				<div th:replace="~{fragments/mainButton :: boton('Iniciar sesión', 'btn-primary', '')}"></div>
-		    </form>
+			<div class="col-md-3">
+			    <h1 class="text-center mb-3">Inicio de sesión</h1>
+			    <form action="#" th:action="@{/login}" method="POST" class="d-flex flex-column p-3 justify-content-center border shadow-lg">
+			        <input type="text" name="username" placeholder="Nombre" required="true" class="mb-3 p-2" />
+			        <input type="password" name="password" placeholder="Contraseña" required="true" class="mb-3 p-2" />
+			        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+					<div th:replace="~{fragments/mainButton :: boton('Iniciar sesión', 'btn-primary', '')}"></div>
+			    </form>
+			</div>
 		</div>
 
 		<div class="container-fluid mt-5 d-flex flex-column align-items-center">
 		    <h1 class="text-center mb-3">Registro</h1>
-			<div th:replace="~{fragments/linkButton :: boton('Iniciar sesión', '/register', '', 'background-color: #1E88E5;')}"></div>
+			<div th:replace="~{fragments/linkButton :: boton('Crear usuario', '/register', '', 'background-color: #1E88E5;')}"></div>
 		</div>
 		
-		<div th:replace="~{fragments/backButton :: boton('/', '', 'background-color: #1E88E5;')}"></div>
+		<div class="m-3" th:replace="~{fragments/backButton :: boton('/', '', 'background-color: #1E88E5;')}"></div>
 		
 		<!-- Footer -->
 	    <div th:replace="~{fragments/footer :: footer}"></div>

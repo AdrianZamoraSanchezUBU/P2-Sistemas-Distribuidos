@@ -7,7 +7,8 @@
   	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Pruebas de excepciones</h1>
+	<!-- Panel de excepciones -->
+	<div th:replace="~{fragments/exceptionHeader :: exceptionHeader}"></div>
 	
 	<!-- Excepciones con bases de datos -->
 	<h2>Excepciones de accesos a bases de datos</h2>
@@ -21,6 +22,8 @@
 	<!-- Conexión a una base de datos -->
 	<div th:if="${db == null}">
 		<h3>Excepciones durante la conexión</h3>
+		<p>Para conexión correcta y ver el resto de excepciones: </p>
+		<p>DB: <b>practica2</b> - tabla: <b>users</b></p>
 	    <form th:action="@{/db/connection}" method="GET" style="display:inline;">
 			<p>Base de datos</p>
 	    	<input type="text" name="database"/>
@@ -67,6 +70,8 @@
 	   	</form>
 	</div>
 		
+	<br>
+	
 	<!-- Se muestran los errores o estados de éxito -->
 	<div th:if="${success}">
 		<h3>Respuesta: [[${code}]]</h3>
@@ -80,10 +85,11 @@
 	    <p th:text="${message}"></p>
 	</div>
 	
-	
-	<a th:href="@{/db/menu}">Volver a las excepciones de bases de datos</a>
-	</br>
-	<a th:href="@{/exception-menu}">Volver al menu de excepciones</a>
+	<div th:if="${db != null}">
+	    <form th:action="@{/db/disconnect}" method="GET" style="display:inline;">
+	   		<div th:replace="~{fragments/mainButton :: boton('Cerrar conexión', 'btn-primary', 'background-color: #EC407A;')}"></div>
+	   	</form>
+	</div>
 	
 	<!-- Footer -->
     <div th:replace="~{fragments/footer :: footer}"></div>
