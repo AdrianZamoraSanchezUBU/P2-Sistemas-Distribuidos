@@ -54,6 +54,7 @@ public class UserController {
     /**
 	 * Gestiona las solicitudes de la ruta /register
 	 * 
+	 * @param model Modelo donde se insertan los datos
 	 * @return página de registro
 	 */
     @GetMapping("/register")
@@ -70,6 +71,9 @@ public class UserController {
 	 * 
 	 * Crea un nuevo usuario a partir de los datos obtenidos
 	 * 
+	 * @param userDTO Objeto de transferencia de datos de usuario
+	 * @param result Resultado que se espera devolver
+	 * @param authentication Gestor de autentificaciones
 	 * @return página de registro o user-list
      */
     @PostMapping("/create-user")

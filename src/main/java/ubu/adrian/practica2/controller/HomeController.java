@@ -17,7 +17,9 @@ public class HomeController {
 	/**
 	 * Gestiona las solicitudes de la ruta /
 	 * 
-	 * @return pagina home
+	 * @param model Modelo donde se insertan los datos
+	 * @param authentication Gestor de autentificaciones
+	 * @return página home
 	 */
 	@GetMapping("/")
     public String home(Model model, Authentication authentication) {
@@ -30,7 +32,7 @@ public class HomeController {
 	/**
 	 * Gestiona las solicitudes de la ruta /exception-menu
 	 * 
-	 * @return pagina exceptionMenu
+	 * @return página de excepciones
 	 */
 	@GetMapping("/exception-menu")
     public String menu() {

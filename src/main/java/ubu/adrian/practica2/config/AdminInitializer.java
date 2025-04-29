@@ -21,6 +21,12 @@ public class AdminInitializer implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * Ejecuta una comprobación de la existencia de un usuario administrador
+     * en caso de no haber uno lo crea. En el caso contrario no hace nada.
+     * 
+     * @param args Argumentos de ejecución
+     */
     @Override
     public void run(String... args) {
         // Obtiene al admin

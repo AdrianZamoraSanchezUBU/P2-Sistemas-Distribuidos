@@ -54,6 +54,7 @@ public class AdminController {
     /**
 	 * Gestiona las solicitudes de la ruta /admin
 	 * 
+	 * @param model Modelo donde se insertan los datos
 	 * @return panel del administrador
 	 */
     @GetMapping("/user-list")
@@ -86,6 +87,8 @@ public class AdminController {
     /**
 	 * Gestiona las solicitudes de la ruta /updateUserData
 	 * 
+	 * @param id identificador del usuario que se quiere actualizar
+	 * @param model Modelo donde se insertan los datos
 	 * @return panel de actualización de usuarios
 	 */
     @GetMapping("/update-user-data")
@@ -101,7 +104,9 @@ public class AdminController {
     /**
 	 * Gestiona las actualizaciones de datos de usuarios
 	 * 
-	 * @return panel del usuario
+	 * @param updatedUserDTO Datos actualizados del usuario
+	 * @param model Modelo donde se insertan los datos
+	 * @return lista de usuarios
 	 */
     @PostMapping("/update-user")
     public String updateUser(@ModelAttribute("user") UserDTO updatedUserDTO, Model model) {

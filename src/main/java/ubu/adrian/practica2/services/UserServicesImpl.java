@@ -19,11 +19,10 @@ public class UserServicesImpl implements UserServices{
 	/**
 	 * Devuelve una lista de todos los usuarios
 	 * 
-	 * @return List<User> lista de todos los usuario encontrados
+	 * @return List<User> Lista de todos los usuario encontrados
 	 */
 	@Override
     public List < User > getAllUsers() {
-    	
         return userRepository.findAll();
     }
 
@@ -42,6 +41,7 @@ public class UserServicesImpl implements UserServices{
 	 * 
 	 * @param id identificador del usuario que se busca
 	 * @throws RuntimeException excepción lanzada cuando no se encuentra al usuario
+	 * @return Usuario que se ha encontrado
 	 */
 	@Override
 	public User getUserById(long id) {
@@ -60,7 +60,7 @@ public class UserServicesImpl implements UserServices{
 	/**
 	 * Elimina al usuario especificado
 	 * 
-	 * @param id identificador del usuario que se desea eliminar
+	 * @param id Identificador del usuario que se desea eliminar
 	 */
 	@Override
 	public void deleteUserById(long id) {

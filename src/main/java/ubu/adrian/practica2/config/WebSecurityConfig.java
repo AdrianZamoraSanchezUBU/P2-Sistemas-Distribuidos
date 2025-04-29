@@ -35,7 +35,7 @@ public class WebSecurityConfig {
     /**
      * Configura la seguridad de la aplicación, incluyendo rutas públicas y autenticación
      * 
-     * @param http objeto HttpSecurity para configurar la seguridad
+     * @param http Objeto HttpSecurity para configurar la seguridad
      * @return La cadena de filtros de seguridad configurada
      * @throws Exception si ocurre un error en la configuración
      */

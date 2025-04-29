@@ -53,7 +53,7 @@ public class User implements UserDetails {
 	/**
 	 * Getter para ID
 	 * 
-	 * @return id identificador del usuario
+	 * @return id Identificador del usuario
 	 */
 	public long getId() {
 		return id;
@@ -62,7 +62,7 @@ public class User implements UserDetails {
 	/**
 	 * Setter para ID
 	 * 
-	 * @param id nuevo identificador del usuario
+	 * @param id Nuevo identificador del usuario
 	 */
 	public void setId(long id) {
 		this.id = id;
@@ -81,7 +81,7 @@ public class User implements UserDetails {
 	/**
 	 * Setter para contraseña
 	 * 
-	 * @return password contraseña
+	 * @param password Contraseña que se asigna
 	 */
 	public void setPassword(String password) {
 		this.password = password;
@@ -100,7 +100,7 @@ public class User implements UserDetails {
 	/**
 	 * Setter para el nombre de usuario
 	 * 
-	 * @param username nombre del usuario
+	 * @param username Nombre del usuario
 	 */
 	public void setUsername(String username) {
 		this.username = username;
@@ -118,7 +118,7 @@ public class User implements UserDetails {
     /**
 	 * Setter para rol de usuario
 	 * 
-	 * @param rol rol del usuario
+	 * @param rol Rol del usuario
 	 */
     public void setRol(String rol) {
         this.rol = rol;
@@ -127,7 +127,7 @@ public class User implements UserDetails {
     /**
      * Devuelve el rol, que es el que ofrece autoridad de aceso
      * 
-     * @return List lista de autorizaciones
+     * @return Collection Lista de autorizaciones
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

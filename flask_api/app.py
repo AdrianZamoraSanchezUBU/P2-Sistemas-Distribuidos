@@ -1,3 +1,4 @@
+# Imports necesarios
 from flask import Flask, jsonify, request
 import mysql.connector
 from mysql.connector import Error, InterfaceError, OperationalError
@@ -9,18 +10,24 @@ app = Flask(__name__)
 ### Excepciones con ficheros ###
 @app.route('/api/file/list', methods=['GET'])
 def file_list():
+    """
+    Devuelve un JSON con los archivos de la ruta ./files/
+
+    En caso de excepción devuelve un JSON con el motivo de la misma
+    """
     try:
+        # Se listan los archivos
         path = './files/'
         files = os.listdir(path)
         
         files.append("file4.txt")
 
+        # Devuelve la lista y un código de éxito
         return jsonify({
             "files": files
         }), 200
     except Exception as e:
-        print(e)
-
+        # Devuelve un error y el motivo
         return jsonify({
             "response": {
                 "code": "UNKNOWN_ERROR",
@@ -30,10 +37,18 @@ def file_list():
 
 @app.route('/api/file/read', methods=['GET'])
 def read_file():
+    """
+    Devuelve un JSON con el contenido del fichero especificado
+    por el argumento filename
+
+    En caso de excepción devuelve un JSON con el motivo de la misma
+    """
 
     filename = request.args.get('filename')
 
+    # Comprueba que se especifica un archivo
     if not filename:
+        # En caso de faltar el parámetro se genera un error controlado
         return jsonify({
             "response": {
                 "code": "MISSING_FILENAME",
@@ -47,12 +62,14 @@ def read_file():
     try:
         with open(path, 'r') as f:
             content = f.read()
+
+        # Devuelve el nombre del fichero y el contenido leido en él
         return jsonify({
             "filename": filename,
             "content": content
         }), 200
     
-    # Gestión de excepciones
+    # Gestión de las excepciones identificadas 
     except FileNotFoundError:
         return jsonify({
             "response": {
@@ -77,16 +94,24 @@ def read_file():
 
 @app.route('/api/file/write', methods=['GET'])
 def write_file():
+    """
+    Devuelve un JSON con el resultado de sumar 1 al contenido
+    del fichero especificado como argumento filename
+
+    En caso de excepción devuelve un JSON con el motivo de la misma
+    """
 
     filename = request.args.get('filename')
 
+    # Comprueba que se especifica un archivo
     if not filename:
+        # En caso de faltar el parámetro se genera un error controlado
         return jsonify({
             "response": {
-                "code": "MISSING_FILENAME",
+                "code": "MISSING_PARAMETER",
                 "message": "Se requiere el nombre del archivo"
             }
-        }), 400
+        }), 4004
 
     path = os.path.join('./files', filename)
 
@@ -95,9 +120,11 @@ def write_file():
         with open(path, 'r+') as f:
             content = f.read().strip()
 
+            # Se comprueba que el formato se puede pasar a integer
             try:
                 number = int(content)
             except ValueError:
+                # Si el formato no era correcto devuelve un error controlado
                 return jsonify({
                     "response": {
                         "code": "INVALID_CONTENT",
@@ -105,10 +132,13 @@ def write_file():
                     }
                 }), 400
 
+            # Suma 1 al contenido y lo sobreescribe 
             number += 1
             f.seek(0)
             f.write(str(number))
             f.truncate()
+
+        # Devuelve el fichero y su nuevo contenido
         return jsonify({
             "filename": filename,
             "content": number
@@ -139,6 +169,12 @@ def write_file():
 
 ### Excepciones en el uso de bases de datos ###
 def get_connection(db):
+    """
+    Crea una conexión con la base de datos pasada como parámetros
+
+    Parámetros:
+        db: base de datos a la que se desea conectar
+    """
     return mysql.connector.connect(
         host="mysqldb",
         port=3306,
@@ -148,6 +184,16 @@ def get_connection(db):
     )
 
 def table_check(cursor, db, table):
+    """
+    Comrprueba que se puede utilizar la tabla, devuelve un conteo del
+    numero de entradas presentes en la tabla
+
+    Parámetros:
+        cursor: objeto de MySQL donde se especifica la query
+        db:     base de datos a la que se le hace la query
+        table:  tabla sobre la que se hace la query
+    """
+
     cursor.execute("""
         SELECT COUNT(*)
         FROM information_schema.tables
@@ -157,9 +203,14 @@ def table_check(cursor, db, table):
 
 @app.route('/api/db/connect')
 def test_db_connection():
+    """
+    Gestiona la realización de conexiones
+    """
+
     db = request.args.get('db')
     table = request.args.get('table')
 
+    # Si falta un parámetro deuvelve un error controlado
     if not db or not table:
         return jsonify({
             "response": {
@@ -169,10 +220,13 @@ def test_db_connection():
         }), 400
 
     try:
+        # Conecta con la base de datos
         conn = get_connection(db)
         cursor = conn.cursor()
 
+        # Hace una comprobación sobre la tabla
         if not table_check(cursor, db, table):
+            # Devuelve un error de tabla no existente si no se puede realizar con éxito
             return jsonify({
                 "response": {
                     "code": "TABLE_NOT_FOUND",
@@ -184,6 +238,7 @@ def test_db_connection():
         cursor.execute(f"SELECT COUNT(*) FROM {table}")
         count = cursor.fetchone()[0]
 
+        # Devuelve el resultado con un código de éxtio
         return jsonify({
             "response": {
                 "code": "CONNECTION_SUCCESSFUL",
@@ -192,7 +247,8 @@ def test_db_connection():
                 "message": f"Conectado a la base de datos: {db}, tabla: {table} con {count} filas"
             }
         }), 200
-
+    
+    # Se gestionan y devuelven las distintas excepciones identificadas
     except OperationalError as e:
         return jsonify({
             "response": {
@@ -216,9 +272,11 @@ def test_db_connection():
 
 @app.route('/api/db/recurso-inexistente')
 def missing_resource_error():
+    """
+    Comprobación de la falta de un recurso al que se trata de acceder
+    """
     try:
         db = request.args.get('db')
-        table = request.args.get('table')
 
         conn = get_connection(db)
         cursor = conn.cursor()
@@ -226,6 +284,7 @@ def missing_resource_error():
         # Se selecciona de una tabla inexistente
         cursor.execute(f"SELECT * FROM no_existe")
     except Error as e:
+        # Se espera lanzar una excepción con un código 404 (recurso no existente)
         return jsonify({
             "response": {
                 "code": "QUERY_ERROR",
@@ -241,6 +300,10 @@ def missing_resource_error():
 
 @app.route('/api/db/error-insercion')
 def insert_error():
+    """
+    Gestión de errores durante la inserción de elementos en la base de datos
+    """
+    # Se trata de hacer una conexión
     try:
         db = request.args.get('db')
         table = request.args.get('table')
@@ -251,6 +314,7 @@ def insert_error():
         # Inserción con clave primaria duplicada (ya debe haber un admin)
         cursor.execute(f"INSERT INTO {table} (username, password) VALUES ('admin', 'pass')")
         conn.commit()
+    # En caso de error durante la inserción se devuelve una excepción y su motivo
     except Error as e:
         return jsonify({
             "response": {
@@ -267,6 +331,9 @@ def insert_error():
 
 @app.route('/api/db/formato-incorrecto')
 def bad_format_error():
+    """
+    Comprobación del error que sucede al incumplir intencionalmente el formato de un campo
+    """
     try:
         db = request.args.get('db')
         table = request.args.get('table')
@@ -278,6 +345,7 @@ def bad_format_error():
         cursor.execute(f"INSERT INTO {table} (id, username, password) VALUES ('string', 'usuarioErroneo', 'pass')")
         conn.commit()
     except Error as e:
+        # En caso de error se devuelve un error y su motivo
         return jsonify({
             "response": {
                 "code": "QUERY_ERROR",
@@ -293,6 +361,10 @@ def bad_format_error():
 
 @app.route('/api/db/query-error')
 def sql_syntax_error():
+    """
+    Se trata de hacer una query pero con formato incorrecto
+    """
+    # Se realiza una conexión y query
     try:
         db = request.args.get('db')
         table = request.args.get('table')
@@ -303,6 +375,7 @@ def sql_syntax_error():
         # Mal escrito
         cursor.execute(f"SELECCIONA * FROM {table}")
     except Error as e:
+        # En caso de error durante la query se devuelve una excepción y su motivo
         return jsonify({
             "response": {
                 "code": "QUERY_ERROR",
@@ -319,15 +392,20 @@ def sql_syntax_error():
 ### Excepciones en el uso de APIs de terceros ###
 @app.route('/api/pokemon/query-pokemon')
 def query_pokemon():
+    """
+    Se trata de hacer una solicitud a la API para buscar información de un Pokemon
+    """
     name = request.args.get('name')
     request_url = f"https://pokeapi.co/api/v2/pokemon/{name}"
 
+
     try:
         response = requests.get(request_url, timeout=5)
-        response.raise_for_status()  # Lanzará HTTPError si la respuesta no es 2xx
+        response.raise_for_status() # Lanzará HTTPError si la respuesta no es 2xx
 
         data = response.json()
 
+        # Devuelve los datos del Pokemon en caso de éxito
         return jsonify({
             "response": {
                 "code": "POKEMON_FOUND",
@@ -340,6 +418,7 @@ def query_pokemon():
             }
         }), 200
 
+    # En caso de errores se devuelve el código de respuesta y el motivo cuando se aposible
     except requests.exceptions.HTTPError as e:
         return jsonify({
             "response": {

@@ -36,8 +36,8 @@ public class DBExceptionController {
 	 * Gestiona las solicitudes, unificadas en este método pues todas son 
 	 * requests a bases de datos
 	 * 
-	 * @param endpoint de llamada de la API
-	 * @param model modelo que se debe devolver
+	 * @param endpoint Ruta de llamada de la API
+	 * @param model Modelo donde se insertan los datos
 	 * @return página de excepciones de bases de datos
 	 */
 	private String handleDbRequest(String endpoint, Model model) {
@@ -103,6 +103,7 @@ public class DBExceptionController {
 	/**
 	 * Gestiona las solicitudes de la ruta /db/menu
 	 * 
+	 * @param model Modelo donde se insertan los datos
 	 * @return pagina de conexion a la base de datos
 	 */
     @GetMapping("/db/menu")
@@ -117,6 +118,7 @@ public class DBExceptionController {
     /**
 	 * Gestiona las solicitudes de la ruta /db/connection
 	 * 
+	 * @param model Modelo donde se insertan los datos
 	 * @return pagina con resultado de la conexion
 	 */
     @GetMapping("/db/connection")
@@ -130,6 +132,7 @@ public class DBExceptionController {
     /**
 	 * Gestiona las solicitudes de la ruta /db/error-insercion
 	 * 
+	 * @param model Modelo donde se insertan los datos
 	 * @return pagina con resultado de la operacion
 	 */
     @GetMapping("/db/error-insercion")
@@ -140,6 +143,7 @@ public class DBExceptionController {
     /**
 	 * Gestiona las solicitudes de la ruta /db/formato-incorrecto
 	 * 
+	 * @param model Modelo donde se insertan los datos
 	 * @return pagina con resultado de la operacion
 	 */
     @GetMapping("/db/formato-incorrecto")
@@ -160,6 +164,7 @@ public class DBExceptionController {
     /**
 	 * Gestiona las solicitudes de la ruta /db/error-query
 	 * 
+	 * @param model Modelo donde se insertan los datos
 	 * @return pagina con resultado de la query
 	 */
     @GetMapping("/db/error-query")
@@ -170,6 +175,7 @@ public class DBExceptionController {
     /**
 	 * Gestiona las solicitudes de la ruta /db/disconnect
 	 * 
+	 * @param model Modelo donde se insertan los datos
 	 * @return pagina con el resultado de la desconexión
 	 */
     @GetMapping("/db/disconnect")

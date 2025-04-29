@@ -17,6 +17,11 @@ public class UserDTO {
 
     /**
      * Constructor con parámetros
+     * 
+     * @param id Id del usuario
+     * @param username Nombre del usuario
+     * @param password Contraseña del usuario
+     * @param rol Rol de usuario
      */
     public UserDTO(Long id, String username, String password, String rol) {
         this.id = id;

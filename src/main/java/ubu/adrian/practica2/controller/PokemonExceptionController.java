@@ -30,7 +30,8 @@ public class PokemonExceptionController {
 	/**
 	 * Gestiona las solicitudes de la ruta /pokemon/menu
 	 * 
-	 * @return pagina de excepciones
+	 * @param model Modelo donde se insertan los datos
+	 * @return página de excepciones
 	 */
     @GetMapping("/pokemon/menu")
     public String dbMenu(Model model) {
@@ -40,7 +41,9 @@ public class PokemonExceptionController {
     /**
 	 * Gestiona las solicitudes de la ruta /pokemon/query
 	 * 
-	 * @return pagina de excepciones
+	 * @param name Nombre del pokemon a buscar
+	 * @param model Modelo donde se insertan los datos
+	 * @return página de información del Pokemon
 	 */
     @GetMapping("/pokemon/query")
     public String dbConection(@RequestParam String name, Model model) {
