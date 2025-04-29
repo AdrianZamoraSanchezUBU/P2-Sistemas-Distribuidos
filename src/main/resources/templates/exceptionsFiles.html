@@ -51,8 +51,8 @@
 	</div>
 
 	
-	<!-- Caso de reqiest exitosa -->
-	<div th:if="${readSuccess} or ${writeSuccess}">
+	<!-- Caso de request exitosa -->
+	<div th:if="${success}">
 		<h3>Codigo de respuesta: [[${httpStatus}]]</h3>
 	    <h3>Contenido de [[${filename}]]:</h3>
 	    <p th:text="${content}"></p>

@@ -70,15 +70,15 @@ public class FileExceptionController {
                 "http://flask-api:5000/api/file/" + endpoint + "?filename=" + filename, Map.class);
 
             if (response.getStatusCode().is2xxSuccessful()) {
-            	String content = (String) response.getBody().get("content");
+            	String content = String.valueOf(response.getBody().get("content"));
                 
             	int httpStatus = response.getStatusCode().value();
             	
             	// Se establecen los atributos pasados al HTML
-                model.addAttribute("readSuccess", true);
+                model.addAttribute("success", true);
                 model.addAttribute("filename", filename);
                 model.addAttribute("content", content);
-                model.addAttribute("httpStatus", httpStatus);
+                model.addAttribute("httpStatus", String.valueOf(httpStatus));
             }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
         	// Se gestiona el error devuelto por Flask

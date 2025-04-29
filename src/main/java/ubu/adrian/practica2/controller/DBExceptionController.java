@@ -70,11 +70,11 @@ public class DBExceptionController {
 
                 // Si se trataba de hacer una conexión y falla no guarda los datos
                 if(endpoint == "connect") {
-                	System.out.println("Bad DB CONECTIOn");
                 	this.database = null;
                     this.table = null;
                 }
                 
+                // Se rellenan los datos del modelo
                 model.addAttribute("db", database);
                 model.addAttribute("table", table);
                 model.addAttribute("errorCode", errorDetails.get("code"));
@@ -87,7 +87,7 @@ public class DBExceptionController {
                     this.table = null;
                 }
             	
-                // Otros errores
+            	// Se rellenan los datos del modelo para otros errores
             	model.addAttribute("db", database);
                 model.addAttribute("table", table);
                 model.addAttribute("errorCode", "UNKNOWN_EXCEPTION");
@@ -123,6 +123,7 @@ public class DBExceptionController {
 	 */
     @GetMapping("/db/connection")
     public String dbConection(@RequestParam String database, @RequestParam String table, Model model) {
+    	// Se asignan los datos de la nueva conexión
     	this.database = database;
         this.table = table;
     	
@@ -180,6 +181,7 @@ public class DBExceptionController {
 	 */
     @GetMapping("/db/disconnect")
     public String dbDisconnect(Model model) {
+    	// Se borran los datos de la conexión
     	this.database = null;
     	this.table = null;
     	

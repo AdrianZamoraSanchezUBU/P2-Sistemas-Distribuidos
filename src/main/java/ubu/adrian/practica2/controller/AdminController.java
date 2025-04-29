@@ -100,7 +100,6 @@ public class AdminController {
         return "updateUserData";
     }
     
-    
     /**
 	 * Gestiona las actualizaciones de datos de usuarios
 	 * 
