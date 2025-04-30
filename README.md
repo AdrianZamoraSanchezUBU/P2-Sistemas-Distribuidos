@@ -21,7 +21,10 @@ La aplicación consisten principalmente en un servidor web con Spring Boot, cuen
 - Gestiona las excepciones que se puedan generar y las devuelve bajo un formato correcto.
 
 ## Uso
-Para generar los ejecutables y poner en marcha los contenedores de Docker se deben seguir los siguientes comandos.
+Dentro de la app, se puede acceder a un panel de gestión de usuarios, para ello se requiere un login como administrador, el cual podemos hacer con el usuario por defecto "admin" con contraseña "admin".
+De la misma forma, para acceder a excepciones para las que se requiere una conexión a una base de datos podemos emplear la base de datos "practica2" y la tabla "users".
+
+Para generar los ejecutables y poner en marcha los contenedores de Docker se deben seguir los siguientes comandos:
 
 ### Para generar el jar:
 `mvn clean package -DskipTests`
