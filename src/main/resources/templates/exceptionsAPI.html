@@ -1,55 +1,67 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Excepciones Pokemon</title>
-    <meta charset="UTF-8">
-	<!-- Bootstrap CDN -->
-  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body >
-	<!-- Panel de excepciones -->
-	<div th:replace="~{fragments/exceptionHeader :: exceptionHeader}"></div>
+	<head>
+	    <title>Excepciones Pokemon</title>
+	    <meta charset="UTF-8">
+	    <!-- Bootstrap CDN -->
+	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body class="bg-light text-dark">
+	    <!-- Panel de excepciones -->
+	    <div th:replace="~{fragments/exceptionHeader :: exceptionHeader}"></div>
 	
-	<!-- Excepciones con APIs de terceros -->
-	<h2>Excepciones de llamadas a la API de Pokemon</h2>
-	<form th:action="@{/pokemon/query}" method="GET" style="display:inline;">
-       <input type="text" name="name"/>
-       <button type="submit">Buscar</button>
-   </form>
-   
-	<!-- Panel donde se muestran los datos del pokemon -->
-	<div style="padding-bottom: 100px;">
-		<div th:if="${success}" >
-			<p>[[${message}]]</p>
-			<p>[[${http_status}]]</p>
-			<h2>Pokemon: [[${name}]] con id [[${id}]]</h2>
-			<h3>Estadísticas</h3>
-			<p>Peso: [[${weight}]]</p>
-			<p>Altura: [[${height}]]</p>
-			
-			<div th:if="${imageUrl != null}">
-			    <img th:src="${imageUrl}" alt="Imagen del pokemon" style="width:250px;">
-			</div>
-			
-			<h3>Respuesta: [[${code}]]</h3>
-			<h3>Codigo de respuesta: [[${httpStatus}]]</h3>
-		    <p th:text="${message}"></p>
-		</div>
-		
-		<!-- Panel donde se muestran las excepciones -->
-		<div th:if="${errorCode}">
-		    <h3>Error: [[${errorCode}]]</h3>
-			<h3>Codigo de respuesta: [[${httpStatus}]]</h3>
-		    <p th:text="${message}"></p>
-		</div>
-			
-		<!-- Panel de excepciones -->
-	    <div class="m-3">
-	        <div th:replace="~{fragments/linkButton :: boton('Volver', '/exception-menu', '', 'background-color: #4CAF50;')}"></div>
+	    <div class="container py-4" style="max-width: 50%;">
+	
+	        <!-- Título -->
+	        <h2 class="mb-4 border-bottom pb-2">Excepciones de llamadas a la API de Pokémon</h2>
+	
+	        <!-- Barra de búsqueda minimalista -->
+	        <form th:action="@{/pokemon/query}" method="GET" class="d-flex mb-5" style="max-width: 400px;">
+	            <input type="text" name="name" class="form-control me-2" placeholder="Buscar Pokémon por nombre o ID...">
+	            <button type="submit" class="btn btn-outline-primary">Buscar</button>
+	        </form>
+	
+	        <!-- Información del Pokémon -->
+	        <div th:if="${success}" class="border rounded shadow-sm p-5 bg-white">
+	            <h2 class="mb-3">[[${name}]] <small class="text-muted">#[[${id}]]</small></h2>
+	
+	            <div class="row align-items-start">
+	                <!-- Imagen centrada -->
+	                <div class="col-md-3 text-center mb-3 mb-md-0">
+	                    <img th:src="${imageUrl}" alt="Imagen del pokemon" class="img-fluid" style="max-height: 300px;" th:if="${imageUrl != null}">
+	                </div>
+	
+	                <!-- Estadísticas -->
+	                <div class="col-md-8">
+	                    <h5 class="border-bottom pb-2">Estadísticas</h5>
+	                    <ul class="list-unstyled">
+	                        <li><strong>Peso:</strong> [[${weight}]]</li>
+	                        <li><strong>Altura:</strong> [[${height}]]</li>
+	                    </ul>
+	                </div>
+	            </div>
+	
+	            <!-- Info adicional -->
+	            <div th:if="${success}" class="mt-4">
+		            <p class="text-muted small">HTTP Status: [[${httpStatus}]]</p>
+	                <p class="text-muted small" th:text="${message}"></p>
+	            </div>
+	        </div>
+	
+	        <!-- Panel de error -->
+	        <div th:if="${errorCode}" class="alert alert-danger mt-4">
+	            <h5>Error: [[${errorCode}]]</h5>
+	            <h5>HTTP Status: [[${httpStatus}]]</h5>
+	            <p th:text="${message}"></p>
+	        </div>
+	
+	        <!-- Botón de volver -->
+	        <div class="mt-4">
+	            <div th:replace="~{fragments/linkButton :: boton('Volver', '/exception-menu', '', 'background-color: #4CAF50;')}"></div>
+	        </div>
 	    </div>
-	<div>
 	
-	<!-- Footer -->
-    <div th:replace="~{fragments/footer :: footer}"></div>
-</body>
+	    <!-- Footer -->
+	    <div th:replace="~{fragments/footer :: footer}"></div>
+	</body>
 </html>

@@ -395,9 +395,9 @@ def query_pokemon():
     """
     Se trata de hacer una solicitud a la API para buscar información de un Pokemon
     """
+    # Se formatea la request
     name = request.args.get('name')
     request_url = f"https://pokeapi.co/api/v2/pokemon/{name}"
-
 
     try:
         response = requests.get(request_url, timeout=5)
@@ -409,7 +409,7 @@ def query_pokemon():
         return jsonify({
             "response": {
                 "code": "POKEMON_FOUND",
-                "message": "Datos de " + name + " obtenidos con éxito",
+                "message": "Datos de " + data["name"] + " obtenidos con éxito",
                 "name": data["name"],
                 "id": data["id"],
                 "weight": data["weight"],
@@ -420,6 +420,16 @@ def query_pokemon():
 
     # En caso de errores se devuelve el código de respuesta y el motivo cuando se aposible
     except requests.exceptions.HTTPError as e:
+        # Error por Pokémon no encontrado
+        if(response.status_code == 404):
+            return jsonify({
+                "response": {
+                    "code": "ERROR",
+                    "message": f"Respuesta HTTP: {response.status_code}, el Pokémon no ha sido encontrado"
+                }
+            }), response.status_code
+        
+        # Otros errores HTTP
         return jsonify({
             "response": {
                 "code": "ERROR",
@@ -428,6 +438,7 @@ def query_pokemon():
         }), response.status_code
 
     except requests.exceptions.ConnectionError:
+        # Excepción por conexión rechazada
         return jsonify({
             "response": {
                 "code": "CONNECTION_ERROR",
@@ -436,6 +447,7 @@ def query_pokemon():
         }), 503
 
     except requests.exceptions.Timeout:
+        # Excepción por timeout
         return jsonify({
             "response": {
                 "code": "TIMEOUT",
@@ -444,6 +456,7 @@ def query_pokemon():
         }), 504
 
     except requests.exceptions.RequestException as e:
+        # Otros errores
         return jsonify({
             "response": {
                 "code": "UNKNOWN_REQUEST_ERROR",

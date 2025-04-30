@@ -65,7 +65,7 @@ public class PokemonExceptionController {
             model.addAttribute("imageUrl", responseBody.get("image_url"));
             model.addAttribute("message", responseBody.get("message"));
             model.addAttribute("success", true);
-            model.addAttribute("httpStatus", httpStatus); 
+            model.addAttribute("httpStatus", String.valueOf(httpStatus));
     	} catch (HttpClientErrorException | HttpServerErrorException e) {
     		// Se gestiona el error devuelto por Flask
             try {

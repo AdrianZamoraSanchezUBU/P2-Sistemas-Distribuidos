@@ -1,97 +1,97 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Excepciones DB</title>
-    <meta charset="UTF-8">
-	<!-- Bootstrap CDN -->
-  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-	<!-- Panel de excepciones -->
-	<div th:replace="~{fragments/exceptionHeader :: exceptionHeader}"></div>
+	<head>
+	    <title>Excepciones DB</title>
+	    <meta charset="UTF-8">
+	    <!-- Bootstrap CDN -->
+	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body class="bg-light text-dark">
+	    <!-- Panel de excepciones -->
+	    <div th:replace="~{fragments/exceptionHeader :: exceptionHeader}"></div>
 	
-	<!-- Excepciones con bases de datos -->
-	<h2>Excepciones de accesos a bases de datos</h2>
+	    <!-- Contenido principal -->
+	    <div class="container py-4">
+	        <!-- Título principal -->
+	        <h2 class="mb-4 border-bottom pb-2">Excepciones de accesos a bases de datos</h2>
 	
-	<!-- Muestra la db y tabla en uso -->
-	<div>
-		<p>Base de datos en uso: [[${db}]]</p>
-		<p>Tabla en uso: [[${table}]]</p>
-	</div>
+	        <!-- Muestra la db y tabla en uso -->
+	        <div class="mb-4">
+	            <p><strong>Base de datos en uso:</strong> [[${db}]]</p>
+	            <p><strong>Tabla en uso:</strong> [[${table}]]</p>
+	        </div>
 	
-	<!-- Conexión a una base de datos -->
-	<div th:if="${db == null}">
-		<h3>Excepciones durante la conexión</h3>
-		<p>Para conexión correcta y ver el resto de excepciones: </p>
-		<p>DB: <b>practica2</b> - tabla: <b>users</b></p>
-	    <form th:action="@{/db/connection}" method="GET" style="display:inline;">
-			<p>Base de datos</p>
-	    	<input type="text" name="database"/>
-			
-			<p >Tabla</p>
-			<input type="text" name="table"/>
-			
-			</br>
-	   		<button type="submit">Conectar</button>
-	   	</form>
-	</div>
-		
-		
-	<!-- Error de restricción (key unica en este caso) -->
-	<div th:if="${db != null}">
-		<h3>Violación de restriccion de primary key</h3>
-	    <form th:action="@{/db/error-insercion}" method="GET" style="display:inline;">
-	   		<button type="submit">Insertar clave duplicada</button>
-	   	</form>
-	</div>
+	        <!-- Conexión a una base de datos -->
+	        <div th:if="${db == null}" class="alert alert-warning">
+	            <h4 class="mb-3">Excepciones durante la conexión</h4>
+	            <p>Para conexión correcta y ver el resto de excepciones:</p>
+	            <p><strong>DB:</strong> practica2 – <strong>tabla:</strong> users</p>
+	            <form th:action="@{/db/connection}" method="GET">
+	                <div class="mb-2">
+	                    <label class="form-label">Base de datos</label>
+	                    <input type="text" name="database" class="form-control form-control-sm" />
+	                </div>
+	                <div class="mb-2">
+	                    <label class="form-label">Tabla</label>
+	                    <input type="text" name="table" class="form-control form-control-sm" />
+	                </div>
+	                <button type="submit" class="btn btn-primary btn-sm mt-2">Conectar</button>
+	            </form>
+	        </div>
 	
-	<!-- Error de formato de datos -->
-	<div th:if="${db != null}">
-		<h3>Error al insertar un INT en un campo String</h3>
-	    <form th:action="@{/db/formato-incorrecto}" method="GET" style="display:inline;">
-	   		<button type="submit">Insertar datos incorrectos</button>
-	   	</form>
-	</div>
-		
-	<!-- Error de tabla no existente -->
-	<div th:if="${db != null}">
-		<h3>Select sobre un recurso (una tabla) no existente</h3>
-	    <form th:action="@{/db/recurso-inexistente}" method="GET" style="display:inline;">
-	   		<button type="submit">Hacer select</button>
-	   	</form>
-	</div>
+	        <!-- Sección de errores disponibles tras conexión -->
+	        <div th:if="${db != null}" class="mb-4">
+	            <div class="mb-3">
+	                <h5>Violación de restricción de primary key</h5>
+	                <form th:action="@{/db/error-insercion}" method="GET">
+	                    <button type="submit" class="btn btn-outline-danger btn-sm">Insertar clave duplicada</button>
+	                </form>
+	            </div>
 	
+	            <div class="mb-3">
+	                <h5>Error al insertar un INT en un campo String</h5>
+	                <form th:action="@{/db/formato-incorrecto}" method="GET">
+	                    <button type="submit" class="btn btn-outline-danger btn-sm">Insertar datos incorrectos</button>
+	                </form>
+	            </div>
 	
-	<!-- Error de query mal formada (mal uso del lenguaje SQL) -->
-	<div th:if="${db != null}">
-		<h3>Error de query mal formada</h3>
-	    <form th:action="@{/db/error-query}" method="GET" style="display:inline;">
-	   		<button type="submit">Hacer query</button>
-	   	</form>
-	</div>
-		
-	<br>
+	            <div class="mb-3">
+	                <h5>Select sobre un recurso (una tabla) no existente</h5>
+	                <form th:action="@{/db/recurso-inexistente}" method="GET">
+	                    <button type="submit" class="btn btn-outline-danger btn-sm">Hacer select</button>
+	                </form>
+	            </div>
 	
-	<!-- Se muestran los errores o estados de éxito -->
-	<div th:if="${success}">
-		<h3>Respuesta: [[${code}]]</h3>
-		<h3>Codigo de respuesta: [[${httpStatus}]]</h3>
-	    <p th:text="${message}"></p>
-	</div>
-		
-	<div th:if="${errorCode}">
-	    <h3>Error: [[${errorCode}]]</h3>
-		<h3>Codigo de respuesta: [[${httpStatus}]]</h3>
-	    <p th:text="${message}"></p>
-	</div>
+	            <div class="mb-3">
+	                <h5>Error de query mal formada</h5>
+	                <form th:action="@{/db/error-query}" method="GET">
+	                    <button type="submit" class="btn btn-outline-danger btn-sm">Hacer query</button>
+	                </form>
+	            </div>
+	        </div>
 	
-	<div th:if="${db != null}">
-	    <form th:action="@{/db/disconnect}" method="GET" style="display:inline;">
-	   		<div th:replace="~{fragments/mainButton :: boton('Cerrar conexión', 'btn-primary', 'background-color: #EC407A;')}"></div>
-	   	</form>
-	</div>
+	        <!-- Mensajes de éxito o error -->
+	        <div th:if="${success}" class="alert alert-success">
+	            <h5>Respuesta: [[${code}]]</h5>
+	            <h5>Código de respuesta: [[${httpStatus}]]</h5>
+	            <p th:text="${message}"></p>
+	        </div>
 	
-	<!-- Footer -->
-    <div th:replace="~{fragments/footer :: footer}"></div>
-</body>
+	        <div th:if="${errorCode}" class="alert alert-danger">
+	            <h5>Error: [[${errorCode}]]</h5>
+	            <h5>Código de respuesta: [[${httpStatus}]]</h5>
+	            <p th:text="${message}"></p>
+	        </div>
+	
+	        <!-- Botón de desconexión -->
+	        <div th:if="${db != null}" class="mt-4">
+	            <form th:action="@{/db/disconnect}" method="GET">
+	                <div th:replace="~{fragments/mainButton :: boton('Cerrar conexión', 'btn-primary', 'background-color: #EC407A;')}"></div>
+	            </form>
+	        </div>
+	    </div>
+	
+	    <!-- Footer -->
+	    <div th:replace="~{fragments/footer :: footer}"></div>
+	</body>
 </html>
